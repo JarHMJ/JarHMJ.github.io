@@ -55,6 +55,7 @@
   </script>
   <!-- google ad -->
   
+<link rel="alternate" href="/feed.xml" title="罐子" type="application/rss+xml">
 </head>
 
 <body>
@@ -137,10 +138,13 @@
         <div class="gkt-article-start"></div>
         <p>首先先看两个函数</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test1</span><span class="params">(**kwargs)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> kwargs.get(<span class="string">'a'</span>):</span><br><span class="line">        print(<span class="string">'存在a'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'不存在a'</span>)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test2</span><span class="params">(**kwargs)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'a'</span> <span class="keyword">in</span> kwargs:</span><br><span class="line">        print(<span class="string">'存在a'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'不存在a'</span>)</span><br></pre></td></tr></table></figure>
+
 <p>乍一看，都没啥毛病，不就是判断kwargs这个字典里有没有这个键嘛。</p>
 <p>然后我们执行一下看看结果：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    print(<span class="string">'test1:'</span>)</span><br><span class="line">    test1(a=<span class="number">0</span>)</span><br><span class="line">    print(<span class="string">'test2:'</span>)</span><br><span class="line">    test2(a=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test1:</span><br><span class="line">不存在a</span><br><span class="line">test2:</span><br><span class="line">存在a</span><br></pre></td></tr></table></figure>
+
 <p>咦，test1明明传了a参数，为啥结果却是没有呢？</p>
 <p>原来test1中<code>kwargs.get(&#39;a&#39;)</code>的值为0，然后if判断的时候就走了else分支。唉，坑啊！</p>
 <p>所以以后判断字典里有没有键就老老实实用in，获取字典里键的值才用get，不然出了bug都不好排查。</p>
@@ -360,15 +364,22 @@
             <div class="hidden-xs">
                 
                 
+                <span>/</span>
+                
+                <a class="text-gray" href="/tags/#python"
+                    title="python">python</a>
+                <span>/</span>
+                
+                
             </div>
-            <a href="/post/mongodb.html" class="title">
-                mongodb
+            <a href="/post/判断字典里是否存在键的写法.html" class="title">
+                判断字典里是否存在键的写法
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2019-09-04，</span>
-                    <span class="hidden-xs">全文55字，</span>
-                    <span>阅读约1分钟</span>
+                    <span>发表于2019-06-27，</span>
+                    <span class="hidden-xs">全文654字，</span>
+                    <span>阅读约3分钟</span>
                 </small>
             </p>
         </div>
@@ -384,19 +395,19 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#关于我"
-                    title="关于我">关于我</a>
+                <a class="text-gray" href="/tags/#杂记"
+                    title="杂记">杂记</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/about.html" class="title">
-                关于我
+            <a href="/post/第一篇.html" class="title">
+                第一篇
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2017-07-03，</span>
-                    <span class="hidden-xs">全文99字，</span>
+                    <span>发表于2018-09-07，</span>
+                    <span class="hidden-xs">全文151字，</span>
                     <span>阅读约1分钟</span>
                 </small>
             </p>
@@ -427,20 +438,20 @@
 </style>
 <div id="featured-tag">
     
-    <a class="post-tag-item" href="/tags/#git" title="git"
-        rel="1">#git (1) </a>
-    
     <a class="post-tag-item" href="/tags/#关于我" title="关于我"
         rel="1">#关于我 (1) </a>
     
-    <a class="post-tag-item" href="/tags/#算法" title="算法"
-        rel="1">#算法 (1) </a>
+    <a class="post-tag-item" href="/tags/#git" title="git"
+        rel="1">#git (1) </a>
     
     <a class="post-tag-item" href="/tags/#杂记" title="杂记"
         rel="1">#杂记 (1) </a>
     
     <a class="post-tag-item" href="/tags/#python" title="python"
         rel="1">#python (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#算法" title="算法"
+        rel="1">#算法 (1) </a>
     
 </div>
     </div>
