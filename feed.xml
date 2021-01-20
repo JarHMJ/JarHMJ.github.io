@@ -15,8 +15,33 @@
     <atom:link href="https://jarhmj.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <description>罐子，罐子的小站，罐子的博客</description>
-    <pubDate>Wed, 20 Jan 2021 16:58:49 GMT</pubDate>
+    <pubDate>Wed, 20 Jan 2021 17:22:28 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>小心golang读写锁的坑</title>
+      <link>https://jarhmj.github.io/post/golang/%E5%B0%8F%E5%BF%83golang%E8%AF%BB%E5%86%99%E9%94%81%E7%9A%84%E5%9D%91.html</link>
+      <guid>https://jarhmj.github.io/post/golang/%E5%B0%8F%E5%BF%83golang%E8%AF%BB%E5%86%99%E9%94%81%E7%9A%84%E5%9D%91.html</guid>
+      <pubDate>Wed, 20 Jan 2021 16:58:49 GMT</pubDate>
+      
+        
+        
+      <description>&lt;p&gt;避免在递归获取读锁&lt;/p&gt;
+</description>
+        
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/golang/">golang</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/golang/">golang</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/golang/%E5%B0%8F%E5%BF%83golang%E8%AF%BB%E5%86%99%E9%94%81%E7%9A%84%E5%9D%91.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>2020新年随想</title>
