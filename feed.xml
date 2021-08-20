@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>罐子</title>
+    <link>https://jarhmj.github.io/</link>
+    
+    <image>
+      <url>https://jarhmj.github.io/img/icon.jpg</url>
+      <title>罐子</title>
+      <link>https://jarhmj.github.io/</link>
+    </image>
+    
+    <atom:link href="https://jarhmj.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    
+    <description>罐子，罐子的小站，罐子的博客</description>
+    <pubDate>Fri, 20 Aug 2021 01:10:48 GMT</pubDate>
+    <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>github action 学习</title>
+      <link>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0.html</link>
+      <guid>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0.html</guid>
+      <pubDate>Fri, 20 Aug 2021 01:09:51 GMT</pubDate>
+      
+        
+        
+      <description>&lt;p&gt;部署blog到github&lt;/p&gt;
+</description>
+        
+      
+      
+      
+      
+      
+      
+      <comments>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>部署k3s之旅</title>
+      <link>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html</link>
+      <guid>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html</guid>
+      <pubDate>Sun, 15 Aug 2021 15:12:21 GMT</pubDate>
+      
+        
+        
+      <description>&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;安装k3s&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td c</description>
+        
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/k3s/">k3s</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>http身份认证介绍</title>
+      <link>https://jarhmj.github.io/post/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D.html</link>
+      <guid>https://jarhmj.github.io/post/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D.html</guid>
+      <pubDate>Thu, 15 Apr 2021 14:12:33 GMT</pubDate>
+      
+        
+        
+      <description>&lt;p&gt;今天调试同事之前写的接口，使用的是basic认证，但是当我在浏览器里输入地址，敲回车的时候，&lt;br&gt;服务器直接给我返回了401的错误，完全不给我输密码的机会，我就纳闷了为啥之前的都有，现在就没了？&lt;br&gt;满头的问号？？？&lt;/p&gt;
+&lt;p&gt;后来查阅资料才发现，http协议是定义</description>
+        
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/http/">http</category>
+      
+      <category domain="https://jarhmj.github.io/categories/http/web/">web</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/http/">http</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>小心golang读写锁的坑</title>
+      <link>https://jarhmj.github.io/post/golang/%E5%B0%8F%E5%BF%83golang%E8%AF%BB%E5%86%99%E9%94%81%E7%9A%84%E5%9D%91.html</link>
+      <guid>https://jarhmj.github.io/post/golang/%E5%B0%8F%E5%BF%83golang%E8%AF%BB%E5%86%99%E9%94%81%E7%9A%84%E5%9D%91.html</guid>
+      <pubDate>Fri, 28 Feb 2020 08:25:53 GMT</pubDate>
+      
+        
+        
+      <description>&lt;p&gt;避免在递归获取读锁&lt;/p&gt;
+</description>
+        
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/golang/">golang</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/golang/">golang</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/golang/%E5%B0%8F%E5%BF%83golang%E8%AF%BB%E5%86%99%E9%94%81%E7%9A%84%E5%9D%91.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>2020新年随想</title>
+      <link>https://jarhmj.github.io/post/2020%E6%96%B0%E5%B9%B4%E9%9A%8F%E6%83%B3.html</link>
+      <guid>https://jarhmj.github.io/post/2020%E6%96%B0%E5%B9%B4%E9%9A%8F%E6%83%B3.html</guid>
+      <pubDate>Sun, 02 Feb 2020 08:25:53 GMT</pubDate>
+      
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/tags/%E9%9A%8F%E7%AC%94/">随笔</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/2020%E6%96%B0%E5%B9%B4%E9%9A%8F%E6%83%B3.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>mongodb</title>
+      <link>https://jarhmj.github.io/post/mongodb.html</link>
+      <guid>https://jarhmj.github.io/post/mongodb.html</guid>
+      <pubDate>Wed, 04 Sep 2019 11:38:56 GMT</pubDate>
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/mongodb/">mongodb</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/mongodb.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>负载均衡算法</title>
+      <link>https://jarhmj.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.html</link>
+      <guid>https://jarhmj.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.html</guid>
+      <pubDate>Tue, 16 Jul 2019 11:53:15 GMT</pubDate>
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/%E7%AE%97%E6%B3%95/">算法</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/%E7%AE%97%E6%B3%95/">算法</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>判断字典里是否存在键的写法</title>
+      <link>https://jarhmj.github.io/post/%E5%88%A4%E6%96%AD%E5%AD%97%E5%85%B8%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E9%94%AE%E7%9A%84%E5%86%99%E6%B3%95.html</link>
+      <guid>https://jarhmj.github.io/post/%E5%88%A4%E6%96%AD%E5%AD%97%E5%85%B8%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E9%94%AE%E7%9A%84%E5%86%99%E6%B3%95.html</guid>
+      <pubDate>Thu, 27 Jun 2019 08:59:08 GMT</pubDate>
+      
+        
+        
+      <description>&lt;p&gt;首先先看两个函数&lt;/p&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/spa</description>
+        
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/python/">python</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/python/">python</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/%E5%88%A4%E6%96%AD%E5%AD%97%E5%85%B8%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E9%94%AE%E7%9A%84%E5%86%99%E6%B3%95.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>git学习之旅</title>
+      <link>https://jarhmj.github.io/post/git%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85.html</link>
+      <guid>https://jarhmj.github.io/post/git%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85.html</guid>
+      <pubDate>Thu, 27 Jun 2019 06:44:08 GMT</pubDate>
+      
+        
+        
+      <description>&lt;h2 id=&quot;这篇不是学习git的教程，只是用于记录我掌握的git的一点点知识。&quot;&gt;&lt;a href=&quot;#这篇不是学习git的教程，只是用于记录我掌握的git的一点点知识。&quot; class=&quot;headerlink&quot; title=&quot;这篇不是学习git的教程，只是用于记录我掌握的git</description>
+        
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/git/">git</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/git/">git</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/git%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>第一篇</title>
+      <link>https://jarhmj.github.io/post/%E7%AC%AC%E4%B8%80%E7%AF%87.html</link>
+      <guid>https://jarhmj.github.io/post/%E7%AC%AC%E4%B8%80%E7%AF%87.html</guid>
+      <pubDate>Fri, 07 Sep 2018 03:52:49 GMT</pubDate>
+      
+        
+        
+      <description>&lt;h1 id=&quot;这是第一篇，不是最后一篇，也不是最后第二篇。。。&quot;&gt;&lt;a href=&quot;#这是第一篇，不是最后一篇，也不是最后第二篇。。。&quot; class=&quot;headerlink&quot; title=&quot;这是第一篇，不是最后一篇，也不是最后第二篇。。。&quot;&gt;&lt;/a&gt;这是第一篇，不是最后一篇，也</description>
+        
+      
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/tags/%E6%9D%82%E8%AE%B0/">杂记</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/%E7%AC%AC%E4%B8%80%E7%AF%87.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>关于我</title>
+      <link>https://jarhmj.github.io/post/about.html</link>
+      <guid>https://jarhmj.github.io/post/about.html</guid>
+      <pubDate>Mon, 03 Jul 2017 03:51:24 GMT</pubDate>
+      
+      <description>woshijar</description>
+      
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/tags/%E5%85%B3%E4%BA%8E%E6%88%91/">关于我</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/about.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>友情链接</title>
+      <link>https://jarhmj.github.io/post/link.html</link>
+      <guid>https://jarhmj.github.io/post/link.html</guid>
+      <pubDate>Mon, 03 Jul 2017 03:51:24 GMT</pubDate>
+      
+      <description>jarhmj的友链</description>
+      
+      
+      <enclosure url="https://jarhmj.github.io/img/related_links/go.png" type="image"/>
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/tags/%E5%8F%8B%E9%93%BE/">友链</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/link.html#disqus_thread</comments>
+      
+    </item>
+    
+  </channel>
+</rss>
