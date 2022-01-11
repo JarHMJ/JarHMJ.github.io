@@ -15,17 +15,17 @@
   <!-- if page has tags, then add tags to keyword -->
   
   
-  <meta name="keywords" content=",">
+  <meta name="keywords" content=",ci,">
   <!-- page.description has higher priority -->
   <meta name="description" content="罐子，罐子的小站，罐子的博客">
   <link rel="shortcut icon" href="/img/icon.jpg">
   <title>
     
-    罐子
+    github action 学习 | 罐子
     
   </title>
 
-  <link rel="canonical" href="https://jarhmj.github.io/page/2/">
+  <link rel="canonical" href="https://jarhmj.github.io/post/github-action-学习/github-action-study.html">
   
 <link rel="stylesheet" href="/css/geektutu.css">
 
@@ -90,17 +90,7 @@
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/判断字典里是否存在键的写法.html">python</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/负载均衡算法.html">算法</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/mongodb.html">数据库</a>
+                    <a class="float-left" href="/post/判断字典里是否存在键的写法/check-key-in-dict.html">python</a>
                     
                 </li>
                 
@@ -110,17 +100,17 @@
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http身份认证介绍/http身份认证介绍.html">http</a>
+                    <a class="float-left" href="/post/http身份认证介绍/http-auth.html">http</a>
                     
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http身份认证介绍/http身份认证介绍.html">web</a>
+                    <a class="float-left" href="/post/http身份认证介绍/http-auth.html">web</a>
                     
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/部署k3s之旅/部署k3s之旅.html">云原生</a>
+                    <a class="float-left" href="/post/部署k3s之旅/install-k3s.html">云原生</a>
                     
                 </li>
                 
@@ -156,22 +146,255 @@
 <main class="col-xs-12 padding-0 markdown-it">
     <!-- Post Container -->
     
-    <style>
-        @media (min-width: 1200px) {
-            .main-container {
-                width: 1000px !important;
-            }
+    
+    <!-- Post Content -->
+<div class="float-left post-container box-shadow">
+    <div class="u-arrow-wrapper hidden-xs">
+        
+        <a class="float-left" href="/post/部署k3s之旅/install-k3s.html"><i class="u-arrow-left"></i></a>
+        
+        
+    </div>
+    <article class="col-xs-12">
+        <h1> github action 学习 </h1>
+        
+        
+        
+        <div class="gkt-article-start"></div>
+        <p>目前自己blog的部署是使用github action来部署的，只要写完文章push到github仓库就能自己build和deploy，完全解放之前deploy的操作。</p>
+<p>github action简直就是神器，可以用来做很多有意思的事情，后续有用到的话再记录吧。</p>
+<h2 id="利用github-action部署到阿里云服务器"><a href="#利用github-action部署到阿里云服务器" class="headerlink" title="利用github action部署到阿里云服务器"></a>利用github action部署到阿里云服务器</h2><p>遇到各种坑，😂😂，不过总算把这个搞定了。<br>大概思路：</p>
+<ol>
+<li>服务器上部署一个webhook用来拉最新的blog文章</li>
+<li>github action写一个step来请求这个webhook</li>
+<li>每次push代码的时候就会触发action去请求webhook</li>
+</ol>
+
+        
+<script src="/js/qrious.min.js"></script>
+
+
+<div class="hidden-xs col-xs-12 text-center">
+    <canvas id="geektutu-post-qr"></canvas>
+    <p style="margin-top: -10px;"><small>微信扫一扫，阅读/分享</small></p>
+</div>
+<script>
+    (function () {
+        new QRious({
+            element: document.getElementById('geektutu-post-qr'),
+            value: window.location.href,
+            size: 120
+        });
+    })();
+</script>
+
+        <hr style="margin-top: 2rem;">
+        <div>
+            
+            <p>
+                <span>本文发表于 2021-08-20，最后修改于 2022-01-11。</span>
+            </p>
+            <!-- 文章末尾的提示 start -->
+            
+            <p>
+                本站永久域名「 <a
+                        href="/post/github-action-学习/github-action-study.html">jarhmj.github.io</a>
+                    」，也可搜索「 罐子 」找到我。
+            </p>
+            
+            
+                
+            <!-- 文章末尾的提示 end -->
+        </div>
+        <hr />
+        <p name="pagination" style="font-size: 1.2em">
+    
+    <a class="float-left" href="/post/部署k3s之旅/install-k3s.html">上一篇 « 部署k3s之旅</a>
+    
+    
+</p>
+    </article>
+    <!-- 赞赏 -->
+    <!--打赏-->
+
+<style>
+    #reward .reward-btn-wrapper {
+        width: 100px;
+        padding-top: 35px;
+        cursor: pointer;
+        margin: 0 auto;
+    }
+
+    #reward .reward-btn {
+        padding: 2px 15px;
+        color: #fff;
+        background-color: #ea6f5a;
+        border-radius: 20px;
+    }
+
+    #reward .reward-code {
+        position: absolute;
+        top: -220px;
+        left: 50%;
+        display: none;
+        width: 360px;
+        height: 240px;
+        margin-left: -180px;
+        padding: 15px 20px;
+        border: 1px solid #e6e6e6;
+        background: #fff;
+        box-shadow: 0 1px 1px 1px #efefef;
+    }
+
+    #reward .reward-code:after,
+    #reward .reward-code:before {
+        position: absolute;
+        content: '';
+        border: 10px solid transparent
+    }
+
+    #reward .reward-code:after {
+        bottom: -19px;
+        left: 50%;
+        margin-left: -10px;
+        border-top-color: #fff
+    }
+
+    #reward .reward-code:before {
+        bottom: -20px;
+        left: 50%;
+        margin-left: -10px;
+        border-top-color: #e6e6e6
+    }
+
+    #reward .qr-code {
+        width: 50%;
+        float: left;
+        padding: 5px;
+    }
+
+    #reward .qr-code p {
+        margin-top: -6px;
+    }
+
+    #reward img {
+        transform: none;
+        -webkit-transform: none;
+        margin-left: 0;
+    }
+
+    #reward img[alt='i'] {
+        width: 20px;
+        height: 20px;
+        z-index: 2;
+        position: absolute;
+        margin: 65px 0 0 65px;
+    }
+
+    #reward img[alt="ali"] {
+        width: 100%;
+        box-sizing: border-box;
+        border: 5px solid #0f9be0;
+    }
+
+    #reward img[alt="wechat"] {
+        width: 100%;
+        box-sizing: border-box;
+        border: 5px solid #3db034;
+    }
+
+    #reward .reward-tip {
+        font-size: 1.2em;
+        margin-bottom: 0;
+        color: #ea6f5a;
+    }
+</style>
+<div id="reward" class="col-xs-12">
+    <div class="reward-btn-wrapper">
+        <div class="reward-btn text-center">赞赏支持</div>
+    </div>
+    <div class="reward-code text-center">
+        <p class="text-center reward-tip"><strong>请我吃胡萝卜 =^_^= </strong></p>
+        <div class="qr-code">
+            <img src="/img/icon.jpg" alt="i">
+            <img id="reward-ali" src="" alt="ali">
+            <p><small>支付宝</small></p>
+        </div>
+        <div class="qr-code">
+            <img src="/img/icon.jpg" alt="i">
+            <img id="reward-wechat" src="" alt="wechat">
+            <p><small>微信</small></p>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window, document) {
+        var aliQr = new QRious({ value: 'https://qr.alipay.com/fkx13691qilrprfxx8phufc' });
+        var wechatQr = new QRious({ value: 'wxp://f2f01zKUJwzMZXXvOfe9_IwRigA8EKCzlPuU' });
+        document.querySelector('#reward-ali').src = aliQr.toDataURL();
+        document.querySelector('#reward-wechat').src = wechatQr.toDataURL();
+
+        var rewardBtn = document.querySelector('#reward .reward-btn-wrapper');
+        var qrCode = document.querySelector('#reward .reward-code')
+        var activeFunc = function (e) {
+            qrCode.style.display = 'block';
         }
-    </style>
-    <div class="float-left post-container box-shadow">
-        <!-- Main Content -->
-<!-- css page.ejs -->
-<!-- 置顶文章 -->
+        var hideFunc = function (e) {
+            qrCode.style.display = 'none';
+        }
 
+        rewardBtn.addEventListener('mouseenter', activeFunc, false)
+        rewardBtn.addEventListener('mouseover', activeFunc, false)
+        rewardBtn.addEventListener('mouseleave', hideFunc, false)
+        qrCode.addEventListener('mouseenter', activeFunc, false)
+        qrCode.addEventListener('mouseover', activeFunc, false)
+        qrCode.addEventListener('mouseleave', hideFunc, false)
+    })(window, document);
+</script>
 
-<!-- 普通文章 -->
+    
+<div class="col-xs-12 text-center" style="margin-top: 30px;">
+    
+    <a style="display:inline-block;" target="_blank" rel="noopener" href="https://github.com/JarHMJ" title="Github"><img style="padding:5px;width:30px;margin-left:0;transform:none;-webkit-transform:none;" src="/img/related_links/github.png" /></a>
+    
+    <a style="display:inline-block;" href="https://jarhmj.github.io/feed.xml" title="RSS"><img style="padding:5px;width:30px;margin-left:0;transform:none;-webkit-transform:none;" src="/img/related_links/rss.jpg" /></a>
+    
+</div>
 
-<div class="post-preview">
+    <!-- 推荐阅读三篇文章 -->
+    <div class="col-xs-12">
+        <h3>推荐阅读</h3>
+        
+        <div class="post-preview">
+    <div class="post-img" style="background-image: url('/')"></div>
+    <div class="post-info">
+        <div class="post-info-center">
+            <div class="hidden-xs">
+                
+                
+                <span>/</span>
+                
+                <a class="text-gray" href="/tags/#http"
+                    title="http">http</a>
+                <span>/</span>
+                
+                
+            </div>
+            <a href="/post/http身份认证介绍/http-auth.html" class="title">
+                http身份认证介绍
+            </a>
+            <p class="text-gray">
+                <small>
+                    <span>发表于2021-04-15，</span>
+                    <span class="hidden-xs">全文2667字，</span>
+                    <span>阅读约9分钟</span>
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
+        
+        <div class="post-preview">
     <div class="post-img" style="background-image: url('/img/related_links/go.png')"></div>
     <div class="post-info">
         <div class="post-info-center">
@@ -199,23 +422,176 @@
         </div>
     </div>
 </div>
-
-<div style="margin: 15px 0">
-    <div class="text-center">
-    <p>
         
-        <a href="/">« 上一页</a>
-        
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        
-    </p>
+        <div class="post-preview">
+    <div class="post-img" style="background-image: url('/')"></div>
+    <div class="post-info">
+        <div class="post-info-center">
+            <div class="hidden-xs">
+                
+                
+                <span>/</span>
+                
+                <a class="text-gray" href="/tags/#关于我"
+                    title="关于我">关于我</a>
+                <span>/</span>
+                
+                
+            </div>
+            <a href="/post/about.html" class="title">
+                关于我
+            </a>
+            <p class="text-gray">
+                <small>
+                    <span>发表于2017-07-03，</span>
+                    <span class="hidden-xs">全文136字，</span>
+                    <span>阅读约1分钟</span>
+                </small>
+            </p>
+        </div>
+    </div>
 </div>
+        
+    </div>
+    <div class="col-xs-12">
+        <!-- 标签列表 -->
+        <!-- Featured Tags -->
+<style>
+    #featured-tag .post-tag-item {
+        font-size: 12px;
+        line-height: 30px;
+        display: inline-block;
+        height: 30px;
+        margin: 5px 0px;
+        padding: 0 7px;
+        color: #333;
+        border-radius: 15px;
+        background: #f6f6f6;
+    }
+
+    #featured-tag .post-tag-item:hover {
+        color: #337ab7;
+    }
+</style>
+<div id="featured-tag">
+    
+    <a class="post-tag-item" href="/tags/#golang" title="golang"
+        rel="1">#golang (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#关于我" title="关于我"
+        rel="1">#关于我 (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#git" title="git"
+        rel="1">#git (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#友链" title="友链"
+        rel="1">#友链 (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#ci" title="ci"
+        rel="1">#ci (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#http" title="http"
+        rel="1">#http (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#python" title="python"
+        rel="1">#python (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#k3s" title="k3s"
+        rel="1">#k3s (1) </a>
+    
 </div>
     </div>
-    <aside class="float-left gkt-sidebar hidden-xs hidden-sm">
-        <div style="clear: both"></div>
-        <div class="gkt-sidebar-wrapper">
-            <section class="bg-white box-shadow"><style>
+    <!-- 评论 -->
+    
+    <div class="col-xs-12">
+        
+<div class="col-xs-12 padding-0">
+    <div id="gitalk-container">
+        <div class="gt-container text-center" style="margin-top: 50px;">
+            <button class="gt-btn gt-btn-public"><span class="gt-btn-text">去 Github 评论</span></button>
+        </div>
+    </div>
+    <div id="gitalk-related"></div>
+</div>
+
+<link rel="stylesheet" href="/css/gitalk.css">
+
+
+<script src="/js/gitalk.min.js"></script>
+
+<script>
+    window.addEventListener('load', function () {
+        function renderCommentUrl(data) {
+            var url = (data[window.location.pathname] || {}).url
+            url && getDom('#gitalk-container button').addEventListener('click', function (e) { window.open(url)})
+            url || (getDom('#gitalk-container').style.display = 'none')
+        }
+        const gitalk = new Gitalk({
+            clientID: '16f276b44d848c62adb5',
+            clientSecret: 'd08d9c4868bfc4bcc0a74613ce5f1ed896c104b1',
+            accessToken: 'xxxx',
+            repo: 'jar-blog-comment',
+            owner: 'JarHMJ',
+            admin: ['JarHMJ'],
+            id: window.location.pathname,
+            distractionFreeMode: false
+        });
+        fetch("https://api.github.com/user").then(function(resp){
+            gitalk.render('gitalk-container');
+        }).catch(function(e){
+            fetch('/tool/issues.json').then(function (r) { return r.json() }).then(renderCommentUrl).catch(function (e) { })
+        })
+        getDom('#gitalk-container').addEventListener('click', function (e) {
+            e && e.stopPropagation && e.stopPropagation();
+        });
+    })
+</script>
+<script>
+    window.addEventListener('load', function () {
+        function render(comments) {
+            var template = '<a href="${comment.url}?utm_source=gitalk" class="dis-item-url"><h3 class="dis-item-title">${comment.title}</h3>' +
+                '<p class="dis-item-des">${comment.count} 评论 ● ${comment.date}</p>' +
+                '<div class="dis-item-content"><img class="dis-item-img" src="${comment.icon}" alt="icon"><p><b><span class="dis-item-user">${comment.user}</span></b>&nbsp;——&nbsp;${comment.body}</p></div>' +
+                '</a>'
+
+            var wrapper = getDom('#gitalk-related');
+            comments = shuffle(comments);
+            comments.slice(0, 4).forEach(function (c) {
+                var div = document.createElement('div');
+                div.classList.add('dis-item');
+                div.innerHTML = template.replace("${comment.url}", c.url)
+                    .replace("${comment.title}", c.title)
+                    .replace("${comment.count}", c.count)
+                    .replace("${comment.date}", c.date)
+                    .replace("${comment.icon}", c.icon)
+                    .replace("${comment.user}", c.user)
+                    .replace("${comment.body}", c.body)
+                wrapper.appendChild(div)
+            })
+            var p = document.createElement('p')
+            p.innerHTML = '<a target="_blank" rel="noopener" href="https://geektutu.com/post/blog-experience-7.html">Gitalk Plus</a>';
+            p.classList.add('dis-divide');
+            wrapper.appendChild(p);
+            wrapper.classList.add('dis-wrapper')
+        }
+        function shuffle(a) {
+            for (var i = a.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+        fetch('/tool/comments.json').then(function (r) { return r.json() }).then(render).catch(function (e) { })
+    })
+</script>
+
+    </div>
+    
+</div>
+<aside class="float-left gkt-sidebar hidden-xs hidden-sm">
+    <div style="clear: both"></div>
+    <div class="gkt-sidebar-wrapper">
+        <section class="box-shadow"><style>
     .gkt-summary {
         border: 1px solid #DDDDDD;
         border-radius: 3px;
@@ -269,13 +645,13 @@
 <div class="gkt-summary">
     <nav>
         <a href="/" class="col-xs-4">
-            <span class="number">11</span><span>文章</span>
+            <span class="number">8</span><span>文章</span>
         </a>
         <a href="/series" class="col-xs-4 middle">
-            <span class="number">8</span><span>专题</span>
+            <span class="number">6</span><span>专题</span>
         </a>
         <a href="/tags" class="col-xs-4">
-            <span class="number">11</span><span>标签</span>
+            <span class="number">8</span><span>标签</span>
         </a>
     </nav>
 
@@ -289,64 +665,64 @@
     </div>
     
 </div></section>
-            <section class="gkt-sidebar-content bg-white box-shadow"><!-- Featured Tags -->
-<style>
-    #featured-tag .post-tag-item {
-        font-size: 12px;
-        line-height: 30px;
-        display: inline-block;
-        height: 30px;
-        margin: 5px 0px;
-        padding: 0 7px;
-        color: #333;
-        border-radius: 15px;
-        background: #f6f6f6;
-    }
+        
+        
+        
+        <section class="gkt-sidebar-content box-shadow">
+            <strong>最近的文章</strong>
+            <ul>
+                
+                <li>
+                    <a href="/post/github-action-学习/github-action-study.html">github action 学习</a>
+                </li>
+                
+                <li>
+                    <a href="/post/部署k3s之旅/install-k3s.html">部署k3s之旅</a>
+                </li>
+                
+                <li>
+                    <a href="/post/http身份认证介绍/http-auth.html">http身份认证介绍</a>
+                </li>
+                
+                <li>
+                    <a href="/post/golang/小心golang读写锁的坑.html">小心golang读写锁的坑</a>
+                </li>
+                
+                <li>
+                    <a href="/post/判断字典里是否存在键的写法/check-key-in-dict.html">判断字典里是否存在键的写法</a>
+                </li>
+                
+                <li>
+                    <a href="/post/git学习之旅.html">git学习之旅</a>
+                </li>
+                
+                <li>
+                    <a href="/post/link.html">友情链接</a>
+                </li>
+                
+                <li>
+                    <a href="/post/about.html">关于我</a>
+                </li>
+                
+            </ul>
+        </section>
+        
+    </div>
+</aside>
 
-    #featured-tag .post-tag-item:hover {
-        color: #337ab7;
-    }
-</style>
-<div id="featured-tag">
-    
-    <a class="post-tag-item" href="/tags/#golang" title="golang"
-        rel="1">#golang (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#随笔" title="随笔"
-        rel="1">#随笔 (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#关于我" title="关于我"
-        rel="1">#关于我 (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#git" title="git"
-        rel="1">#git (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#友链" title="友链"
-        rel="1">#友链 (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#mongodb" title="mongodb"
-        rel="1">#mongodb (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#python" title="python"
-        rel="1">#python (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#算法" title="算法"
-        rel="1">#算法 (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#ci" title="ci"
-        rel="1">#ci (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#http" title="http"
-        rel="1">#http (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#k3s" title="k3s"
-        rel="1">#k3s (1) </a>
-    
-</div></section>
-            
-            
-        </div>
-    </aside>
+<script>
+    (function () {
+        function resizeUArrow() {
+            var s = getDom('.u-arrow-wrapper').style
+            var pc = getDom('.post-container')
+            s.left = getPosition(pc).x + 'px';
+            s.width = pc.clientWidth + 'px';
+        }
+        resizeUArrow()
+        window.addEventListener('resize', resizeUArrow);
+    })();
+</script>
+
     
 
 <script>

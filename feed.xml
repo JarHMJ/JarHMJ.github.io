@@ -15,13 +15,13 @@
     <atom:link href="https://jarhmj.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <description>罐子，罐子的小站，罐子的博客</description>
-    <pubDate>Tue, 11 Jan 2022 03:48:42 GMT</pubDate>
+    <pubDate>Tue, 11 Jan 2022 06:16:02 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
       <title>github action 学习</title>
-      <link>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0/github-action-%E5%AD%A6%E4%B9%A0.html</link>
-      <guid>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0/github-action-%E5%AD%A6%E4%B9%A0.html</guid>
+      <link>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0/github-action-study.html</link>
+      <guid>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0/github-action-study.html</guid>
       <pubDate>Fri, 20 Aug 2021 09:09:51 GMT</pubDate>
       
         
@@ -37,14 +37,14 @@
       <category domain="https://jarhmj.github.io/tags/ci/">ci</category>
       
       
-      <comments>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0/github-action-%E5%AD%A6%E4%B9%A0.html#disqus_thread</comments>
+      <comments>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0/github-action-study.html#disqus_thread</comments>
       
     </item>
     
     <item>
       <title>部署k3s之旅</title>
-      <link>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html</link>
-      <guid>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html</guid>
+      <link>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/install-k3s.html</link>
+      <guid>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/install-k3s.html</guid>
       <pubDate>Sun, 15 Aug 2021 23:12:21 GMT</pubDate>
       
         
@@ -63,14 +63,14 @@
       <category domain="https://jarhmj.github.io/tags/k3s/">k3s</category>
       
       
-      <comments>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html#disqus_thread</comments>
+      <comments>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/install-k3s.html#disqus_thread</comments>
       
     </item>
     
     <item>
       <title>http身份认证介绍</title>
-      <link>https://jarhmj.github.io/post/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D.html</link>
-      <guid>https://jarhmj.github.io/post/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D.html</guid>
+      <link>https://jarhmj.github.io/post/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/http-auth.html</link>
+      <guid>https://jarhmj.github.io/post/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/http-auth.html</guid>
       <pubDate>Thu, 15 Apr 2021 22:12:33 GMT</pubDate>
       
         
@@ -90,7 +90,7 @@
       <category domain="https://jarhmj.github.io/tags/http/">http</category>
       
       
-      <comments>https://jarhmj.github.io/post/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D.html#disqus_thread</comments>
+      <comments>https://jarhmj.github.io/post/http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/http-auth.html#disqus_thread</comments>
       
     </item>
     
@@ -120,64 +120,9 @@
     </item>
     
     <item>
-      <title>2020新年随想</title>
-      <link>https://jarhmj.github.io/post/2020%E6%96%B0%E5%B9%B4%E9%9A%8F%E6%83%B3.html</link>
-      <guid>https://jarhmj.github.io/post/2020%E6%96%B0%E5%B9%B4%E9%9A%8F%E6%83%B3.html</guid>
-      <pubDate>Sun, 02 Feb 2020 16:25:53 GMT</pubDate>
-      
-      
-      
-      
-      
-      <category domain="https://jarhmj.github.io/tags/%E9%9A%8F%E7%AC%94/">随笔</category>
-      
-      
-      <comments>https://jarhmj.github.io/post/2020%E6%96%B0%E5%B9%B4%E9%9A%8F%E6%83%B3.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>mongodb</title>
-      <link>https://jarhmj.github.io/post/mongodb.html</link>
-      <guid>https://jarhmj.github.io/post/mongodb.html</guid>
-      <pubDate>Wed, 04 Sep 2019 19:38:56 GMT</pubDate>
-      
-      
-      
-      
-      <category domain="https://jarhmj.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</category>
-      
-      
-      <category domain="https://jarhmj.github.io/tags/mongodb/">mongodb</category>
-      
-      
-      <comments>https://jarhmj.github.io/post/mongodb.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>负载均衡算法</title>
-      <link>https://jarhmj.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.html</link>
-      <guid>https://jarhmj.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.html</guid>
-      <pubDate>Tue, 16 Jul 2019 19:53:15 GMT</pubDate>
-      
-      
-      
-      
-      <category domain="https://jarhmj.github.io/categories/%E7%AE%97%E6%B3%95/">算法</category>
-      
-      
-      <category domain="https://jarhmj.github.io/tags/%E7%AE%97%E6%B3%95/">算法</category>
-      
-      
-      <comments>https://jarhmj.github.io/post/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
       <title>判断字典里是否存在键的写法</title>
-      <link>https://jarhmj.github.io/post/%E5%88%A4%E6%96%AD%E5%AD%97%E5%85%B8%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E9%94%AE%E7%9A%84%E5%86%99%E6%B3%95.html</link>
-      <guid>https://jarhmj.github.io/post/%E5%88%A4%E6%96%AD%E5%AD%97%E5%85%B8%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E9%94%AE%E7%9A%84%E5%86%99%E6%B3%95.html</guid>
+      <link>https://jarhmj.github.io/post/%E5%88%A4%E6%96%AD%E5%AD%97%E5%85%B8%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E9%94%AE%E7%9A%84%E5%86%99%E6%B3%95/check-key-in-dict.html</link>
+      <guid>https://jarhmj.github.io/post/%E5%88%A4%E6%96%AD%E5%AD%97%E5%85%B8%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E9%94%AE%E7%9A%84%E5%86%99%E6%B3%95/check-key-in-dict.html</guid>
       <pubDate>Thu, 27 Jun 2019 16:59:08 GMT</pubDate>
       
         
@@ -195,7 +140,7 @@
       <category domain="https://jarhmj.github.io/tags/python/">python</category>
       
       
-      <comments>https://jarhmj.github.io/post/%E5%88%A4%E6%96%AD%E5%AD%97%E5%85%B8%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E9%94%AE%E7%9A%84%E5%86%99%E6%B3%95.html#disqus_thread</comments>
+      <comments>https://jarhmj.github.io/post/%E5%88%A4%E6%96%AD%E5%AD%97%E5%85%B8%E9%87%8C%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E9%94%AE%E7%9A%84%E5%86%99%E6%B3%95/check-key-in-dict.html#disqus_thread</comments>
       
     </item>
     

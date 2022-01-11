@@ -15,17 +15,17 @@
   <!-- if page has tags, then add tags to keyword -->
   
   
-  <meta name="keywords" content=",k3s,">
+  <meta name="keywords" content=",http,">
   <!-- page.description has higher priority -->
   <meta name="description" content="罐子，罐子的小站，罐子的博客">
   <link rel="shortcut icon" href="/img/icon.jpg">
   <title>
     
-    部署k3s之旅 | 罐子
+    http身份认证介绍 | 罐子
     
   </title>
 
-  <link rel="canonical" href="https://jarhmj.github.io/post/部署k3s之旅/部署k3s之旅.html">
+  <link rel="canonical" href="https://jarhmj.github.io/post/http身份认证介绍/http-auth.html">
   
 <link rel="stylesheet" href="/css/geektutu.css">
 
@@ -90,17 +90,7 @@
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/判断字典里是否存在键的写法.html">python</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/负载均衡算法.html">算法</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/mongodb.html">数据库</a>
+                    <a class="float-left" href="/post/判断字典里是否存在键的写法/check-key-in-dict.html">python</a>
                     
                 </li>
                 
@@ -110,17 +100,17 @@
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http身份认证介绍/http身份认证介绍.html">http</a>
+                    <a class="float-left" href="/post/http身份认证介绍/http-auth.html">http</a>
                     
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http身份认证介绍/http身份认证介绍.html">web</a>
+                    <a class="float-left" href="/post/http身份认证介绍/http-auth.html">web</a>
                     
                 </li>
                 
-                <li class="gkt-cate-name float-left active">
-                    <a class="float-left" href="/post/部署k3s之旅/部署k3s之旅.html">云原生</a>
+                <li class="gkt-cate-name float-left ">
+                    <a class="float-left" href="/post/部署k3s之旅/install-k3s.html">云原生</a>
                     
                 </li>
                 
@@ -161,23 +151,23 @@
 <div class="float-left post-container box-shadow">
     <div class="u-arrow-wrapper hidden-xs">
         
-        <a class="float-left" href="/post/http身份认证介绍/http身份认证介绍.html"><i class="u-arrow-left"></i></a>
+        <a class="float-left" href="/post/golang/小心golang读写锁的坑.html"><i class="u-arrow-left"></i></a>
         
         
-        <a class="float-right" href="/post/github-action-学习/github-action-学习.html"><i class="u-arrow-right"></i></a>
+        <a class="float-right" href="/post/部署k3s之旅/install-k3s.html"><i class="u-arrow-right"></i></a>
         
     </div>
     <article class="col-xs-12">
-        <h1> 部署k3s之旅 </h1>
+        <h1> http身份认证介绍 </h1>
         
         
         <div class="hidden-lg hidden-md series_links">
-            <p> <strong> 云原生系列文章链接：</strong></p>
+            <p> <strong> http系列文章链接：</strong></p>
             <ul>
                 
                 <li>
-                    <a href="/post/部署k3s之旅/部署k3s之旅.html">部署k3s之旅</a>
-                    <span class="post-item-date">(Aug 15, 2021)</span>
+                    <a href="/post/http身份认证介绍/http-auth.html">http身份认证介绍</a>
+                    <span class="post-item-date">(Apr 15, 2021)</span>
                 </li>
                 
             </ul>
@@ -185,27 +175,34 @@
         
         
         <div class="gkt-article-start"></div>
-        <ol>
-<li><p>安装k3s</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -</span><br></pre></td></tr></table></figure>
-<p>检查服务是否都起来了，都是running就ok了</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">❯ kubectl get po -A</span><br><span class="line">NAMESPACE     NAME                                      READY   STATUS      RESTARTS   AGE</span><br><span class="line">kube-system   local-path-provisioner-5ff76fc89d-jswg4   1/1     Running     0          2m8s</span><br><span class="line">kube-system   metrics-server-86cbb8457f-klq8m           1/1     Running     0          2m8s</span><br><span class="line">kube-system   coredns-7448499f4d-p8gx2                  1/1     Running     0          2m8s</span><br><span class="line">kube-system   helm-install-traefik-crd-747n2            0/1     Completed   0          2m8s</span><br><span class="line">kube-system   helm-install-traefik-h2nqf                0/1     Completed   1          2m8s</span><br><span class="line">kube-system   svclb-traefik-wjhj6                       2/2     Running     0          67s</span><br><span class="line">kube-system   traefik-97b44b794-hkhwx                   1/1     Running     0          68s</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启用traefik的dashboard<br>traefik从2.0版本开始dashboard默认是不会启用的，所以还需要自己手动开启，部署一下IngressRoute,把端口暴露出去</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: traefik.containo.us/v1alpha1</span><br><span class="line">kind: IngressRoute</span><br><span class="line">metadata:</span><br><span class="line">  name: traefik-dashboard</span><br><span class="line">  namespace: kube-system</span><br><span class="line">spec:</span><br><span class="line">  entryPoints:</span><br><span class="line">  - web</span><br><span class="line">  routes:</span><br><span class="line">  - match: Host(`traefik.qikqiak.com`)  # 指定域名</span><br><span class="line">    kind: Rule</span><br><span class="line">    services:</span><br><span class="line">    - name: api@internal</span><br><span class="line">      kind: TraefikService  # 引用另外的 Traefik Service</span><br></pre></td></tr></table></figure>
-<p>默认情况下 Traefik 的 IngressRoute 已经允许跨 namespace 进行通信了，可以通过设置参数 –providers.kubernetescrd.allowCrossNamespace=true 开启（默认已经开启），开启后 IngressRoute 就可以引用 IngressRoute 命名空间以外的其他命名空间中的任何资源了。</p>
-</li>
-<li><p>自动生成HTTPS证书<br>Traefik支持使用Let’s Encrypt自动生成证书，要使用 Let’s Encrypt 来进行自动化 HTTPS，就需要首先开启 ACME，开启 ACME 需要通过静态配置的方式，也就是说可以通过环境变量、启动参数等方式来提供。</p>
-</li>
-</ol>
-<p>修改traefik的配置文件<code>/var/lib/rancher/k3s/server/manifests/traefik.yaml</code>，保存后会自动更新traefik的pod</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">additionalArguments:</span><br><span class="line">- &quot;--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json&quot;</span><br><span class="line">- &quot;--certificatesresolvers.letsencrypt.acme.email=849104648@qq.com&quot;</span><br><span class="line">- &quot;--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web&quot;</span><br><span class="line">persistence:</span><br><span class="line">  enabled: true</span><br><span class="line">securityContext:</span><br><span class="line">  readOnlyRootFilesystem: false</span><br><span class="line">  runAsGroup: 0</span><br><span class="line">  runAsUser: 0</span><br><span class="line">  runAsNonRoot: false</span><br></pre></td></tr></table></figure>
-<p>这样traefik就可以自动帮我们配置证书了</p>
-<p>再修改一下之前部署的ingressroute，使之使用证书</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: traefik.containo.us/v1alpha1</span><br><span class="line">kind: IngressRoute</span><br><span class="line">metadata:</span><br><span class="line">  name: traefik-dashboard</span><br><span class="line">  namespace: kube-system</span><br><span class="line">spec:</span><br><span class="line">  entryPoints:</span><br><span class="line">  - web</span><br><span class="line">  routes:</span><br><span class="line">  - match: Host(`traefik.qikqiak.com`)  # 指定域名</span><br><span class="line">    kind: Rule</span><br><span class="line">    services:</span><br><span class="line">    - name: api@internal</span><br><span class="line">      kind: TraefikService  # 引用另外的 Traefik Service</span><br><span class="line">  tls:</span><br><span class="line">    certResolver: letsencrypt</span><br></pre></td></tr></table></figure>
+        <p>今天调试同事之前写的接口，使用的是basic认证，但是当我在浏览器里输入地址，敲回车的时候，<br>服务器直接给我返回了401的错误，完全不给我输密码的机会，我就纳闷了为啥之前的都有，现在就没了？<br>满头的问号？？？</p>
+<p>后来查阅资料才发现，http协议是定义了一套身份认证的流程，照着这个流程走就会弹窗让输入密码。</p>
+<p><img src="http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_b6d32605-1e80-4f5c-a568-d5f44552e32c.png" alt="企业微信截图_b6d32605-1e80-4f5c-a568-d5f44552e32c"></p>
+<p>流程：服务器端向客户端返回 <code>401</code>（Unauthorized，未被授权的） 状态码，并在 <code>WWW-Authenticate</code> 首部提供如何进行验证的信息，其中至少包含有一种质询方式。之后有意向证明自己身份的客户端可以在新的请求中添加  <code>Authorization</code> 首部字段进行验证，字段值为身份验证凭证信息。通常客户端会弹出一个密码框让用户填写，然后发送包含有恰当的 <code>Authorization</code> 首部的请求。</p>
+<p>简单点说就是在返回的请求头里面加上：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WWW-Authenticate: &lt;type&gt; realm=&lt;realm&gt;</span><br></pre></td></tr></table></figure>
+
+<p>来告诉用户你要用什么认证方案进行认证</p>
+<p>然后发送的请求头里面加上：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Authorization: &lt;type&gt; &lt;credentials&gt;</span><br></pre></td></tr></table></figure>
+
+<p>就可以完成认证了</p>
+<p>http 所支持的认证方式有多种，其中Basic认证是最常见的，还有下面一些认证方式：</p>
+<ul>
+<li><strong>Basic</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7617">RFC 7617</a>, base64编码凭证. 详情请参阅下文.),</li>
+<li><strong>Bearer</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6750">RFC 6750</a>, bearer 令牌通过OAuth 2.0保护资源),</li>
+<li><strong>Digest</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7616">RFC 7616</a>, 只有 md5 散列 在Firefox中支持, 查看 <a target="_blank" rel="noopener" href="https://bugzilla.mozilla.org/show_bug.cgi?id=472823">bug 472823</a> 用于SHA加密支持),</li>
+<li><strong>HOBA</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7486">RFC 7486</a> (草案), <strong>H</strong>TTP <strong>O</strong>rigin-<strong>B</strong>ound 认证, 基于数字签名),</li>
+<li><strong>Mutual</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/draft-ietf-httpauth-mutual-11">draft-ietf-httpauth-mutual</a>),</li>
+<li><strong>AWS4-HMAC-SHA256</strong> (查看 <a target="_blank" rel="noopener" href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html">AWS docs</a>).</li>
+</ul>
+<p>随后，我查看了gin的源码，也是如此：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BasicAuthForRealm returns a Basic HTTP Authorization middleware. It takes as arguments a map[string]string where</span></span><br><span class="line"><span class="comment">// the key is the user name and the value is the password, as well as the name of the Realm.</span></span><br><span class="line"><span class="comment">// If the realm is empty, &quot;Authorization Required&quot; will be used by default.</span></span><br><span class="line"><span class="comment">// (see http://tools.ietf.org/html/rfc2617#section-1.2)</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BasicAuthForRealm</span><span class="params">(accounts Accounts, realm <span class="keyword">string</span>)</span> <span class="title">HandlerFunc</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> realm == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		realm = <span class="string">&quot;Authorization Required&quot;</span></span><br><span class="line">	&#125;</span><br><span class="line">	realm = <span class="string">&quot;Basic realm=&quot;</span> + strconv.Quote(realm)</span><br><span class="line">	pairs := processAccounts(accounts)</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// Search user in the slice of allowed credentials</span></span><br><span class="line">		user, found := pairs.searchCredential(c.requestHeader(<span class="string">&quot;Authorization&quot;</span>))</span><br><span class="line">		<span class="keyword">if</span> !found &#123;</span><br><span class="line">			<span class="comment">// Credentials doesn&#x27;t match, we return 401 and abort handlers chain.</span></span><br><span class="line">			c.Header(<span class="string">&quot;WWW-Authenticate&quot;</span>, realm)</span><br><span class="line">			c.AbortWithStatus(http.StatusUnauthorized)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// The user credentials was found, set user&#x27;s id to key AuthUserKey in this context, the user&#x27;s id can be read later using</span></span><br><span class="line">		<span class="comment">// c.MustGet(gin.AuthUserKey).</span></span><br><span class="line">		c.Set(AuthUserKey, user)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-<p>总结：本次部署k3s还算顺利，没有存在镜像之类拉不下来的情况，因为有中文官网，本地化也做的不做，文档里直接提供的官方的镜像，不过配置traefik的时候有点坑需要爬一下，多看看traefik的文档吧！！！🍻🍻🍻</p>
+
+<p>参考链接：</p>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication</a></p>
 
         
 <script src="/js/qrious.min.js"></script>
@@ -231,20 +228,24 @@
             <p>
                 <span>专题: </span>
                 
-                <a href="/series/#云原生">
-                    <code key="云原生" class="post-label">云原生</code>
+                <a href="/series/#http">
+                    <code key="http" class="post-label">http</code>
+                </a>
+                
+                <a href="/series/#web">
+                    <code key="web" class="post-label">web</code>
                 </a>
                 
             </p>
             
             <p>
-                <span>本文发表于 2021-08-15，最后修改于 2022-01-11。</span>
+                <span>本文发表于 2021-04-15，最后修改于 2022-01-11。</span>
             </p>
             <!-- 文章末尾的提示 start -->
             
             <p>
                 本站永久域名「 <a
-                        href="/post/部署k3s之旅/部署k3s之旅.html">jarhmj.github.io</a>
+                        href="/post/http身份认证介绍/http-auth.html">jarhmj.github.io</a>
                     」，也可搜索「 罐子 」找到我。
             </p>
             
@@ -255,10 +256,10 @@
         <hr />
         <p name="pagination" style="font-size: 1.2em">
     
-    <a class="float-left" href="/post/http身份认证介绍/http身份认证介绍.html">上一篇 « http身份认证介绍</a>
+    <a class="float-left" href="/post/golang/小心golang读写锁的坑.html">上一篇 « 小心golang读写锁的坑</a>
     
     
-    <a class="float-right" href="/post/github-action-学习/github-action-学习.html">下一篇 » github action 学习</a>
+    <a class="float-right" href="/post/部署k3s之旅/install-k3s.html">下一篇 » 部署k3s之旅</a>
     
 </p>
     </article>
@@ -428,7 +429,7 @@
                 
                 
             </div>
-            <a href="/post/github-action-学习/github-action-学习.html" class="title">
+            <a href="/post/github-action-学习/github-action-study.html" class="title">
                 github action 学习
             </a>
             <p class="text-gray">
@@ -451,20 +452,20 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#随笔"
-                    title="随笔">随笔</a>
+                <a class="text-gray" href="/tags/#python"
+                    title="python">python</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/2020新年随想.html" class="title">
-                2020新年随想
+            <a href="/post/判断字典里是否存在键的写法/check-key-in-dict.html" class="title">
+                判断字典里是否存在键的写法
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2020-02-02，</span>
-                    <span class="hidden-xs">全文61字，</span>
-                    <span>阅读约1分钟</span>
+                    <span>发表于2019-06-27，</span>
+                    <span class="hidden-xs">全文676字，</span>
+                    <span>阅读约3分钟</span>
                 </small>
             </p>
         </div>
@@ -472,7 +473,7 @@
 </div>
         
         <div class="post-preview">
-    <div class="post-img" style="background-image: url('/')"></div>
+    <div class="post-img" style="background-image: url('/img/related_links/go.png')"></div>
     <div class="post-info">
         <div class="post-info-center">
             <div class="hidden-xs">
@@ -480,19 +481,19 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#算法"
-                    title="算法">算法</a>
+                <a class="text-gray" href="/tags/#友链"
+                    title="友链">友链</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/负载均衡算法.html" class="title">
-                负载均衡算法
+            <a href="/post/link.html" class="title">
+                友情链接
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2019-07-16，</span>
-                    <span class="hidden-xs">全文74字，</span>
+                    <span>发表于2017-07-03，</span>
+                    <span class="hidden-xs">全文131字，</span>
                     <span>阅读约1分钟</span>
                 </small>
             </p>
@@ -526,9 +527,6 @@
     <a class="post-tag-item" href="/tags/#golang" title="golang"
         rel="1">#golang (1) </a>
     
-    <a class="post-tag-item" href="/tags/#随笔" title="随笔"
-        rel="1">#随笔 (1) </a>
-    
     <a class="post-tag-item" href="/tags/#关于我" title="关于我"
         rel="1">#关于我 (1) </a>
     
@@ -538,20 +536,14 @@
     <a class="post-tag-item" href="/tags/#友链" title="友链"
         rel="1">#友链 (1) </a>
     
-    <a class="post-tag-item" href="/tags/#mongodb" title="mongodb"
-        rel="1">#mongodb (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#python" title="python"
-        rel="1">#python (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#算法" title="算法"
-        rel="1">#算法 (1) </a>
-    
     <a class="post-tag-item" href="/tags/#ci" title="ci"
         rel="1">#ci (1) </a>
     
     <a class="post-tag-item" href="/tags/#http" title="http"
         rel="1">#http (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#python" title="python"
+        rel="1">#python (1) </a>
     
     <a class="post-tag-item" href="/tags/#k3s" title="k3s"
         rel="1">#k3s (1) </a>
@@ -702,13 +694,13 @@
 <div class="gkt-summary">
     <nav>
         <a href="/" class="col-xs-4">
-            <span class="number">11</span><span>文章</span>
+            <span class="number">8</span><span>文章</span>
         </a>
         <a href="/series" class="col-xs-4 middle">
-            <span class="number">8</span><span>专题</span>
+            <span class="number">6</span><span>专题</span>
         </a>
         <a href="/tags" class="col-xs-4">
-            <span class="number">11</span><span>标签</span>
+            <span class="number">8</span><span>标签</span>
         </a>
     </nav>
 
@@ -725,12 +717,12 @@
         
         
         <section class="gkt-sidebar-content box-shadow">
-            <strong>云原生</strong>
+            <strong>http</strong>
             <ul>
                 
                 <li>
-                    <a href="/post/部署k3s之旅/部署k3s之旅.html"
-                        class="gkt-sidebar-active">部署k3s之旅</a>
+                    <a href="/post/http身份认证介绍/http-auth.html"
+                        class="gkt-sidebar-active">http身份认证介绍</a>
                     
                     <!-- Table of Contents -->
 <div id="sidebar-toc">
@@ -786,15 +778,15 @@
             <ul>
                 
                 <li>
-                    <a href="/post/github-action-学习/github-action-学习.html">github action 学习</a>
+                    <a href="/post/github-action-学习/github-action-study.html">github action 学习</a>
                 </li>
                 
                 <li>
-                    <a href="/post/部署k3s之旅/部署k3s之旅.html">部署k3s之旅</a>
+                    <a href="/post/部署k3s之旅/install-k3s.html">部署k3s之旅</a>
                 </li>
                 
                 <li>
-                    <a href="/post/http身份认证介绍/http身份认证介绍.html">http身份认证介绍</a>
+                    <a href="/post/http身份认证介绍/http-auth.html">http身份认证介绍</a>
                 </li>
                 
             </ul>
