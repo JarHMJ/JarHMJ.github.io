@@ -15,7 +15,7 @@
     <atom:link href="https://jarhmj.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <description>罐子，罐子的小站，罐子的博客</description>
-    <pubDate>Tue, 11 Jan 2022 06:16:02 GMT</pubDate>
+    <pubDate>Tue, 11 Jan 2022 06:23:19 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -43,8 +43,8 @@
     
     <item>
       <title>部署k3s之旅</title>
-      <link>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/install-k3s.html</link>
-      <guid>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/install-k3s.html</guid>
+      <link>https://jarhmj.github.io/post/install-k3s/install-k3s.html</link>
+      <guid>https://jarhmj.github.io/post/install-k3s/install-k3s.html</guid>
       <pubDate>Sun, 15 Aug 2021 23:12:21 GMT</pubDate>
       
         
@@ -63,7 +63,7 @@
       <category domain="https://jarhmj.github.io/tags/k3s/">k3s</category>
       
       
-      <comments>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/install-k3s.html#disqus_thread</comments>
+      <comments>https://jarhmj.github.io/post/install-k3s/install-k3s.html#disqus_thread</comments>
       
     </item>
     
