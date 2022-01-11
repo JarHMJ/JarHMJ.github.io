@@ -15,7 +15,7 @@
   <!-- if page has tags, then add tags to keyword -->
   
   
-  <meta name="keywords" content=",">
+  <meta name="keywords" content=",ci,">
   <!-- page.description has higher priority -->
   <meta name="description" content="罐子，罐子的小站，罐子的博客">
   <link rel="shortcut icon" href="/img/icon.jpg">
@@ -25,7 +25,7 @@
     
   </title>
 
-  <link rel="canonical" href="https://jarhmj.github.io/post/github-action-学习.html">
+  <link rel="canonical" href="https://jarhmj.github.io/post/github-action-学习/github-action-学习.html">
   
 <link rel="stylesheet" href="/css/geektutu.css">
 
@@ -120,7 +120,7 @@
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/部署k3s之旅.html">云原生</a>
+                    <a class="float-left" href="/post/部署k3s之旅/部署k3s之旅.html">云原生</a>
                     
                 </li>
                 
@@ -161,7 +161,7 @@
 <div class="float-left post-container box-shadow">
     <div class="u-arrow-wrapper hidden-xs">
         
-        <a class="float-left" href="/post/部署k3s之旅.html"><i class="u-arrow-left"></i></a>
+        <a class="float-left" href="/post/部署k3s之旅/部署k3s之旅.html"><i class="u-arrow-left"></i></a>
         
         
     </div>
@@ -171,7 +171,14 @@
         
         
         <div class="gkt-article-start"></div>
-        <p>部署blog到github</p>
+        <p>目前自己blog的部署是使用github action来部署的，只要写完文章push到github仓库就能自己build和deploy，完全解放之前deploy的操作。</p>
+<p>github action简直就是神器，可以用来做很多有意思的事情，后续有用到的话再记录吧。</p>
+<h2 id="利用github-action部署到阿里云服务器"><a href="#利用github-action部署到阿里云服务器" class="headerlink" title="利用github action部署到阿里云服务器"></a>利用github action部署到阿里云服务器</h2><p>遇到各种坑，😂😂，不过总算把这个搞定了。<br>大概思路：</p>
+<ol>
+<li>服务器上部署一个webhook用来拉最新的blog文章</li>
+<li>github action写一个step来请求这个webhook</li>
+<li>每次push代码的时候就会触发action去请求webhook</li>
+</ol>
 
         
 <script src="/js/qrious.min.js"></script>
@@ -195,13 +202,13 @@
         <div>
             
             <p>
-                <span>本文发表于 2021-08-20，最后修改于 2021-08-20。</span>
+                <span>本文发表于 2021-08-20，最后修改于 2021-08-22。</span>
             </p>
             <!-- 文章末尾的提示 start -->
             
             <p>
                 本站永久域名「 <a
-                        href="/post/github-action-学习.html">jarhmj.github.io</a>
+                        href="/post/github-action-学习/github-action-学习.html">jarhmj.github.io</a>
                     」，也可搜索「 罐子 」找到我。
             </p>
             
@@ -212,7 +219,7 @@
         <hr />
         <p name="pagination" style="font-size: 1.2em">
     
-    <a class="float-left" href="/post/部署k3s之旅.html">上一篇 « 部署k3s之旅</a>
+    <a class="float-left" href="/post/部署k3s之旅/部署k3s之旅.html">上一篇 « 部署k3s之旅</a>
     
     
 </p>
@@ -383,13 +390,42 @@
                 
                 
             </div>
-            <a href="/post/部署k3s之旅.html" class="title">
+            <a href="/post/部署k3s之旅/部署k3s之旅.html" class="title">
                 部署k3s之旅
             </a>
             <p class="text-gray">
                 <small>
                     <span>发表于2021-08-15，</span>
                     <span class="hidden-xs">全文2691字，</span>
+                    <span>阅读约9分钟</span>
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
+        
+        <div class="post-preview">
+    <div class="post-img" style="background-image: url('/')"></div>
+    <div class="post-info">
+        <div class="post-info-center">
+            <div class="hidden-xs">
+                
+                
+                <span>/</span>
+                
+                <a class="text-gray" href="/tags/#http"
+                    title="http">http</a>
+                <span>/</span>
+                
+                
+            </div>
+            <a href="/post/http身份认证介绍/http身份认证介绍.html" class="title">
+                http身份认证介绍
+            </a>
+            <p class="text-gray">
+                <small>
+                    <span>发表于2021-04-15，</span>
+                    <span class="hidden-xs">全文2667字，</span>
                     <span>阅读约9分钟</span>
                 </small>
             </p>
@@ -426,35 +462,6 @@
     </div>
 </div>
         
-        <div class="post-preview">
-    <div class="post-img" style="background-image: url('/')"></div>
-    <div class="post-info">
-        <div class="post-info-center">
-            <div class="hidden-xs">
-                
-                
-                <span>/</span>
-                
-                <a class="text-gray" href="/tags/#算法"
-                    title="算法">算法</a>
-                <span>/</span>
-                
-                
-            </div>
-            <a href="/post/负载均衡算法.html" class="title">
-                负载均衡算法
-            </a>
-            <p class="text-gray">
-                <small>
-                    <span>发表于2019-07-16，</span>
-                    <span class="hidden-xs">全文74字，</span>
-                    <span>阅读约1分钟</span>
-                </small>
-            </p>
-        </div>
-    </div>
-</div>
-        
     </div>
     <div class="col-xs-12">
         <!-- 标签列表 -->
@@ -478,9 +485,6 @@
 </style>
 <div id="featured-tag">
     
-    <a class="post-tag-item" href="/tags/#golang" title="golang"
-        rel="1">#golang (1) </a>
-    
     <a class="post-tag-item" href="/tags/#随笔" title="随笔"
         rel="1">#随笔 (1) </a>
     
@@ -490,26 +494,29 @@
     <a class="post-tag-item" href="/tags/#git" title="git"
         rel="1">#git (1) </a>
     
-    <a class="post-tag-item" href="/tags/#python" title="python"
-        rel="1">#python (1) </a>
+    <a class="post-tag-item" href="/tags/#mongodb" title="mongodb"
+        rel="1">#mongodb (1) </a>
     
     <a class="post-tag-item" href="/tags/#友链" title="友链"
         rel="1">#友链 (1) </a>
     
-    <a class="post-tag-item" href="/tags/#mongodb" title="mongodb"
-        rel="1">#mongodb (1) </a>
+    <a class="post-tag-item" href="/tags/#python" title="python"
+        rel="1">#python (1) </a>
     
     <a class="post-tag-item" href="/tags/#算法" title="算法"
         rel="1">#算法 (1) </a>
     
-    <a class="post-tag-item" href="/tags/#杂记" title="杂记"
-        rel="1">#杂记 (1) </a>
+    <a class="post-tag-item" href="/tags/#golang" title="golang"
+        rel="1">#golang (1) </a>
     
-    <a class="post-tag-item" href="/tags/#k3s" title="k3s"
-        rel="1">#k3s (1) </a>
+    <a class="post-tag-item" href="/tags/#ci" title="ci"
+        rel="1">#ci (1) </a>
     
     <a class="post-tag-item" href="/tags/#http" title="http"
         rel="1">#http (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#k3s" title="k3s"
+        rel="1">#k3s (1) </a>
     
 </div>
     </div>
@@ -577,7 +584,7 @@
 <div class="gkt-summary">
     <nav>
         <a href="/" class="col-xs-4">
-            <span class="number">12</span><span>文章</span>
+            <span class="number">11</span><span>文章</span>
         </a>
         <a href="/series" class="col-xs-4 middle">
             <span class="number">8</span><span>专题</span>
@@ -605,11 +612,11 @@
             <ul>
                 
                 <li>
-                    <a href="/post/github-action-学习.html">github action 学习</a>
+                    <a href="/post/github-action-学习/github-action-学习.html">github action 学习</a>
                 </li>
                 
                 <li>
-                    <a href="/post/部署k3s之旅.html">部署k3s之旅</a>
+                    <a href="/post/部署k3s之旅/部署k3s之旅.html">部署k3s之旅</a>
                 </li>
                 
                 <li>
@@ -641,7 +648,7 @@
                 </li>
                 
                 <li>
-                    <a href="/post/第一篇.html">第一篇</a>
+                    <a href="/post/link.html">友情链接</a>
                 </li>
                 
             </ul>
@@ -802,7 +809,7 @@
 </style>
 <footer class="text-center col-xs-12">
     <p>
-        <small>© 2021 - jarhmj - </small>
+        <small>© 2022 - jarhmj - </small>
         <small>
             <a target="_blank" rel="nofollow noopener" href="http://beian.miit.gov.cn/">苏ICP备2021014627号-1</a>
         </small>

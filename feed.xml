@@ -15,34 +15,36 @@
     <atom:link href="https://jarhmj.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <description>罐子，罐子的小站，罐子的博客</description>
-    <pubDate>Fri, 20 Aug 2021 01:10:48 GMT</pubDate>
+    <pubDate>Sat, 21 Aug 2021 19:14:28 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
       <title>github action 学习</title>
-      <link>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0.html</link>
-      <guid>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0.html</guid>
+      <link>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0/github-action-%E5%AD%A6%E4%B9%A0.html</link>
+      <guid>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0/github-action-%E5%AD%A6%E4%B9%A0.html</guid>
       <pubDate>Fri, 20 Aug 2021 01:09:51 GMT</pubDate>
       
         
         
-      <description>&lt;p&gt;部署blog到github&lt;/p&gt;
-</description>
+      <description>&lt;p&gt;目前自己blog的部署是使用github action来部署的，只要写完文章push到github仓库就能自己build和deploy，完全解放之前deploy的操作。&lt;/p&gt;
+&lt;p&gt;github action简直就是神器，可以用来做很多有意思的事情，后续有用到的话再记录吧</description>
         
       
       
       
       
       
+      <category domain="https://jarhmj.github.io/tags/ci/">ci</category>
       
-      <comments>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0.html#disqus_thread</comments>
+      
+      <comments>https://jarhmj.github.io/post/github-action-%E5%AD%A6%E4%B9%A0/github-action-%E5%AD%A6%E4%B9%A0.html#disqus_thread</comments>
       
     </item>
     
     <item>
       <title>部署k3s之旅</title>
-      <link>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html</link>
-      <guid>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html</guid>
+      <link>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html</link>
+      <guid>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html</guid>
       <pubDate>Sun, 15 Aug 2021 15:12:21 GMT</pubDate>
       
         
@@ -61,7 +63,7 @@
       <category domain="https://jarhmj.github.io/tags/k3s/">k3s</category>
       
       
-      <comments>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html#disqus_thread</comments>
+      <comments>https://jarhmj.github.io/post/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85/%E9%83%A8%E7%BD%B2k3s%E4%B9%8B%E6%97%85.html#disqus_thread</comments>
       
     </item>
     
@@ -218,28 +220,6 @@
       
       
       <comments>https://jarhmj.github.io/post/git%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>第一篇</title>
-      <link>https://jarhmj.github.io/post/%E7%AC%AC%E4%B8%80%E7%AF%87.html</link>
-      <guid>https://jarhmj.github.io/post/%E7%AC%AC%E4%B8%80%E7%AF%87.html</guid>
-      <pubDate>Fri, 07 Sep 2018 03:52:49 GMT</pubDate>
-      
-        
-        
-      <description>&lt;h1 id=&quot;这是第一篇，不是最后一篇，也不是最后第二篇。。。&quot;&gt;&lt;a href=&quot;#这是第一篇，不是最后一篇，也不是最后第二篇。。。&quot; class=&quot;headerlink&quot; title=&quot;这是第一篇，不是最后一篇，也不是最后第二篇。。。&quot;&gt;&lt;/a&gt;这是第一篇，不是最后一篇，也</description>
-        
-      
-      
-      
-      
-      
-      <category domain="https://jarhmj.github.io/tags/%E6%9D%82%E8%AE%B0/">杂记</category>
-      
-      
-      <comments>https://jarhmj.github.io/post/%E7%AC%AC%E4%B8%80%E7%AF%87.html#disqus_thread</comments>
       
     </item>
     

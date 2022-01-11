@@ -15,17 +15,17 @@
   <!-- if page has tags, then add tags to keyword -->
   
   
-  <meta name="keywords" content=",杂记,">
+  <meta name="keywords" content=",k3s,">
   <!-- page.description has higher priority -->
   <meta name="description" content="罐子，罐子的小站，罐子的博客">
   <link rel="shortcut icon" href="/img/icon.jpg">
   <title>
     
-    第一篇 | 罐子
+    部署k3s之旅 | 罐子
     
   </title>
 
-  <link rel="canonical" href="https://jarhmj.github.io/post/第一篇.html">
+  <link rel="canonical" href="https://jarhmj.github.io/post/部署k3s之旅/部署k3s之旅.html">
   
 <link rel="stylesheet" href="/css/geektutu.css">
 
@@ -119,8 +119,8 @@
                     
                 </li>
                 
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/部署k3s之旅.html">云原生</a>
+                <li class="gkt-cate-name float-left active">
+                    <a class="float-left" href="/post/部署k3s之旅/部署k3s之旅.html">云原生</a>
                     
                 </li>
                 
@@ -161,20 +161,51 @@
 <div class="float-left post-container box-shadow">
     <div class="u-arrow-wrapper hidden-xs">
         
-        <a class="float-left" href="/post/about.html"><i class="u-arrow-left"></i></a>
+        <a class="float-left" href="/post/http身份认证介绍/http身份认证介绍.html"><i class="u-arrow-left"></i></a>
         
         
-        <a class="float-right" href="/post/git学习之旅.html"><i class="u-arrow-right"></i></a>
+        <a class="float-right" href="/post/github-action-学习/github-action-学习.html"><i class="u-arrow-right"></i></a>
         
     </div>
     <article class="col-xs-12">
-        <h1> 第一篇 </h1>
+        <h1> 部署k3s之旅 </h1>
         
+        
+        <div class="hidden-lg hidden-md series_links">
+            <p> <strong> 云原生系列文章链接：</strong></p>
+            <ul>
+                
+                <li>
+                    <a href="/post/部署k3s之旅/部署k3s之旅.html">部署k3s之旅</a>
+                    <span class="post-item-date">(Aug 15, 2021)</span>
+                </li>
+                
+            </ul>
+        </div>
         
         
         <div class="gkt-article-start"></div>
-        <h1 id="这是第一篇，不是最后一篇，也不是最后第二篇。。。"><a href="#这是第一篇，不是最后一篇，也不是最后第二篇。。。" class="headerlink" title="这是第一篇，不是最后一篇，也不是最后第二篇。。。"></a>这是第一篇，不是最后一篇，也不是最后第二篇。。。</h1><p>想开始写博客已经很久了，就是缺乏动力，迟迟没有动手。</p>
-<p>最近想记录一下自己的学习成果，so开始搞了一个博客，托管在github上。</p>
+        <ol>
+<li><p>安装k3s</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -</span><br></pre></td></tr></table></figure>
+<p>检查服务是否都起来了，都是running就ok了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">❯ kubectl get po -A</span><br><span class="line">NAMESPACE     NAME                                      READY   STATUS      RESTARTS   AGE</span><br><span class="line">kube-system   local-path-provisioner-5ff76fc89d-jswg4   1/1     Running     0          2m8s</span><br><span class="line">kube-system   metrics-server-86cbb8457f-klq8m           1/1     Running     0          2m8s</span><br><span class="line">kube-system   coredns-7448499f4d-p8gx2                  1/1     Running     0          2m8s</span><br><span class="line">kube-system   helm-install-traefik-crd-747n2            0/1     Completed   0          2m8s</span><br><span class="line">kube-system   helm-install-traefik-h2nqf                0/1     Completed   1          2m8s</span><br><span class="line">kube-system   svclb-traefik-wjhj6                       2/2     Running     0          67s</span><br><span class="line">kube-system   traefik-97b44b794-hkhwx                   1/1     Running     0          68s</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启用traefik的dashboard<br>traefik从2.0版本开始dashboard默认是不会启用的，所以还需要自己手动开启，部署一下IngressRoute,把端口暴露出去</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: traefik.containo.us/v1alpha1</span><br><span class="line">kind: IngressRoute</span><br><span class="line">metadata:</span><br><span class="line">  name: traefik-dashboard</span><br><span class="line">  namespace: kube-system</span><br><span class="line">spec:</span><br><span class="line">  entryPoints:</span><br><span class="line">  - web</span><br><span class="line">  routes:</span><br><span class="line">  - match: Host(`traefik.qikqiak.com`)  # 指定域名</span><br><span class="line">    kind: Rule</span><br><span class="line">    services:</span><br><span class="line">    - name: api@internal</span><br><span class="line">      kind: TraefikService  # 引用另外的 Traefik Service</span><br></pre></td></tr></table></figure>
+<p>默认情况下 Traefik 的 IngressRoute 已经允许跨 namespace 进行通信了，可以通过设置参数 –providers.kubernetescrd.allowCrossNamespace=true 开启（默认已经开启），开启后 IngressRoute 就可以引用 IngressRoute 命名空间以外的其他命名空间中的任何资源了。</p>
+</li>
+<li><p>自动生成HTTPS证书<br>Traefik支持使用Let’s Encrypt自动生成证书，要使用 Let’s Encrypt 来进行自动化 HTTPS，就需要首先开启 ACME，开启 ACME 需要通过静态配置的方式，也就是说可以通过环境变量、启动参数等方式来提供。</p>
+</li>
+</ol>
+<p>修改traefik的配置文件<code>/var/lib/rancher/k3s/server/manifests/traefik.yaml</code>，保存后会自动更新traefik的pod</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">additionalArguments:</span><br><span class="line">- &quot;--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json&quot;</span><br><span class="line">- &quot;--certificatesresolvers.letsencrypt.acme.email=849104648@qq.com&quot;</span><br><span class="line">- &quot;--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web&quot;</span><br><span class="line">persistence:</span><br><span class="line">  enabled: true</span><br><span class="line">securityContext:</span><br><span class="line">  readOnlyRootFilesystem: false</span><br><span class="line">  runAsGroup: 0</span><br><span class="line">  runAsUser: 0</span><br><span class="line">  runAsNonRoot: false</span><br></pre></td></tr></table></figure>
+<p>这样traefik就可以自动帮我们配置证书了</p>
+<p>再修改一下之前部署的ingressroute，使之使用证书</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: traefik.containo.us/v1alpha1</span><br><span class="line">kind: IngressRoute</span><br><span class="line">metadata:</span><br><span class="line">  name: traefik-dashboard</span><br><span class="line">  namespace: kube-system</span><br><span class="line">spec:</span><br><span class="line">  entryPoints:</span><br><span class="line">  - web</span><br><span class="line">  routes:</span><br><span class="line">  - match: Host(`traefik.qikqiak.com`)  # 指定域名</span><br><span class="line">    kind: Rule</span><br><span class="line">    services:</span><br><span class="line">    - name: api@internal</span><br><span class="line">      kind: TraefikService  # 引用另外的 Traefik Service</span><br><span class="line">  tls:</span><br><span class="line">    certResolver: letsencrypt</span><br></pre></td></tr></table></figure>
+
+
+<p>总结：本次部署k3s还算顺利，没有存在镜像之类拉不下来的情况，因为有中文官网，本地化也做的不做，文档里直接提供的官方的镜像，不过配置traefik的时候有点坑需要爬一下，多看看traefik的文档吧！！！🍻🍻🍻</p>
 
         
 <script src="/js/qrious.min.js"></script>
@@ -198,13 +229,22 @@
         <div>
             
             <p>
-                <span>本文发表于 2018-09-07，最后修改于 2020-06-29。</span>
+                <span>专题: </span>
+                
+                <a href="/series/#云原生">
+                    <code key="云原生" class="post-label">云原生</code>
+                </a>
+                
+            </p>
+            
+            <p>
+                <span>本文发表于 2021-08-15，最后修改于 2021-08-21。</span>
             </p>
             <!-- 文章末尾的提示 start -->
             
             <p>
                 本站永久域名「 <a
-                        href="/post/第一篇.html">jarhmj.github.io</a>
+                        href="/post/部署k3s之旅/部署k3s之旅.html">jarhmj.github.io</a>
                     」，也可搜索「 罐子 」找到我。
             </p>
             
@@ -215,10 +255,10 @@
         <hr />
         <p name="pagination" style="font-size: 1.2em">
     
-    <a class="float-left" href="/post/about.html">上一篇 « 关于我</a>
+    <a class="float-left" href="/post/http身份认证介绍/http身份认证介绍.html">上一篇 « http身份认证介绍</a>
     
     
-    <a class="float-right" href="/post/git学习之旅.html">下一篇 » git学习之旅</a>
+    <a class="float-right" href="/post/github-action-学习/github-action-学习.html">下一篇 » github action 学习</a>
     
 </p>
     </article>
@@ -382,19 +422,19 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#http"
-                    title="http">http</a>
+                <a class="text-gray" href="/tags/#k3s"
+                    title="k3s">k3s</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/http身份认证介绍/http身份认证介绍.html" class="title">
-                http身份认证介绍
+            <a href="/post/部署k3s之旅/部署k3s之旅.html" class="title">
+                部署k3s之旅
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2021-04-15，</span>
-                    <span class="hidden-xs">全文2667字，</span>
+                    <span>发表于2021-08-15，</span>
+                    <span class="hidden-xs">全文2691字，</span>
                     <span>阅读约9分钟</span>
                 </small>
             </p>
@@ -411,20 +451,20 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#git"
-                    title="git">git</a>
+                <a class="text-gray" href="/tags/#随笔"
+                    title="随笔">随笔</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/git学习之旅.html" class="title">
-                git学习之旅
+            <a href="/post/2020新年随想.html" class="title">
+                2020新年随想
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2019-06-27，</span>
-                    <span class="hidden-xs">全文373字，</span>
-                    <span>阅读约2分钟</span>
+                    <span>发表于2020-02-02，</span>
+                    <span class="hidden-xs">全文61字，</span>
+                    <span>阅读约1分钟</span>
                 </small>
             </p>
         </div>
@@ -432,7 +472,7 @@
 </div>
         
         <div class="post-preview">
-    <div class="post-img" style="background-image: url('/img/related_links/go.png')"></div>
+    <div class="post-img" style="background-image: url('/')"></div>
     <div class="post-info">
         <div class="post-info-center">
             <div class="hidden-xs">
@@ -440,19 +480,19 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#友链"
-                    title="友链">友链</a>
+                <a class="text-gray" href="/tags/#mongodb"
+                    title="mongodb">mongodb</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/link.html" class="title">
-                友情链接
+            <a href="/post/mongodb.html" class="title">
+                mongodb
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2017-07-03，</span>
-                    <span class="hidden-xs">全文113字，</span>
+                    <span>发表于2019-09-04，</span>
+                    <span class="hidden-xs">全文83字，</span>
                     <span>阅读约1分钟</span>
                 </small>
             </p>
@@ -483,9 +523,6 @@
 </style>
 <div id="featured-tag">
     
-    <a class="post-tag-item" href="/tags/#golang" title="golang"
-        rel="1">#golang (1) </a>
-    
     <a class="post-tag-item" href="/tags/#随笔" title="随笔"
         rel="1">#随笔 (1) </a>
     
@@ -495,26 +532,29 @@
     <a class="post-tag-item" href="/tags/#git" title="git"
         rel="1">#git (1) </a>
     
-    <a class="post-tag-item" href="/tags/#python" title="python"
-        rel="1">#python (1) </a>
+    <a class="post-tag-item" href="/tags/#mongodb" title="mongodb"
+        rel="1">#mongodb (1) </a>
     
     <a class="post-tag-item" href="/tags/#友链" title="友链"
         rel="1">#友链 (1) </a>
     
-    <a class="post-tag-item" href="/tags/#mongodb" title="mongodb"
-        rel="1">#mongodb (1) </a>
+    <a class="post-tag-item" href="/tags/#python" title="python"
+        rel="1">#python (1) </a>
     
     <a class="post-tag-item" href="/tags/#算法" title="算法"
         rel="1">#算法 (1) </a>
     
-    <a class="post-tag-item" href="/tags/#杂记" title="杂记"
-        rel="1">#杂记 (1) </a>
+    <a class="post-tag-item" href="/tags/#golang" title="golang"
+        rel="1">#golang (1) </a>
     
-    <a class="post-tag-item" href="/tags/#k3s" title="k3s"
-        rel="1">#k3s (1) </a>
+    <a class="post-tag-item" href="/tags/#ci" title="ci"
+        rel="1">#ci (1) </a>
     
     <a class="post-tag-item" href="/tags/#http" title="http"
         rel="1">#http (1) </a>
+    
+    <a class="post-tag-item" href="/tags/#k3s" title="k3s"
+        rel="1">#k3s (1) </a>
     
 </div>
     </div>
@@ -582,7 +622,7 @@
 <div class="gkt-summary">
     <nav>
         <a href="/" class="col-xs-4">
-            <span class="number">12</span><span>文章</span>
+            <span class="number">11</span><span>文章</span>
         </a>
         <a href="/series" class="col-xs-4 middle">
             <span class="number">8</span><span>专题</span>
@@ -604,49 +644,77 @@
 </div></section>
         
         
+        <section class="gkt-sidebar-content box-shadow">
+            <strong>云原生</strong>
+            <ul>
+                
+                <li>
+                    <a href="/post/部署k3s之旅/部署k3s之旅.html"
+                        class="gkt-sidebar-active">部署k3s之旅</a>
+                    
+                    <!-- Table of Contents -->
+<div id="sidebar-toc">
+  <!-- TOC  -->
+  
+  
+</div>
+
+<script>
+  (function () {
+    var h2 = document.querySelectorAll('article h2');
+    var h3 = document.querySelectorAll('article h3');
+    var linkList = document.querySelectorAll('#sidebar-toc a');
+
+    function findLinkElement(name) {
+      for (var i = 0; i < linkList.length; i++) {
+        var items = linkList[i].href.split('#');
+        if (items && items[items.length - 1] === encodeURIComponent(name)) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    function activeLink(titleList) {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      for (var i = titleList.length - 1; i >= 0; i--) {
+        if (scrollTop - titleList[i].offsetTop > 0) {
+          var index = findLinkElement(titleList[i].id);
+          index != -1 && linkList[index].classList.add('gkt-sidebar-active');
+          break;
+        }
+      }
+    }
+
+    window.addEventListener("scroll", function (e) {
+      [].slice.call(linkList).forEach(function (link) {
+        link.classList.remove('gkt-sidebar-active');
+      })
+      activeLink(h2);
+    })
+  })();
+</script>
+                    
+                </li>
+                
+            </ul>
+        </section>
+        
         
         <section class="gkt-sidebar-content box-shadow">
             <strong>最近的文章</strong>
             <ul>
                 
                 <li>
-                    <a href="/post/github-action-学习.html">github action 学习</a>
+                    <a href="/post/github-action-学习/github-action-学习.html">github action 学习</a>
                 </li>
                 
                 <li>
-                    <a href="/post/部署k3s之旅.html">部署k3s之旅</a>
+                    <a href="/post/部署k3s之旅/部署k3s之旅.html">部署k3s之旅</a>
                 </li>
                 
                 <li>
                     <a href="/post/http身份认证介绍/http身份认证介绍.html">http身份认证介绍</a>
-                </li>
-                
-                <li>
-                    <a href="/post/golang/小心golang读写锁的坑.html">小心golang读写锁的坑</a>
-                </li>
-                
-                <li>
-                    <a href="/post/2020新年随想.html">2020新年随想</a>
-                </li>
-                
-                <li>
-                    <a href="/post/mongodb.html">mongodb</a>
-                </li>
-                
-                <li>
-                    <a href="/post/负载均衡算法.html">负载均衡算法</a>
-                </li>
-                
-                <li>
-                    <a href="/post/判断字典里是否存在键的写法.html">判断字典里是否存在键的写法</a>
-                </li>
-                
-                <li>
-                    <a href="/post/git学习之旅.html">git学习之旅</a>
-                </li>
-                
-                <li>
-                    <a href="/post/第一篇.html">第一篇</a>
                 </li>
                 
             </ul>
@@ -807,7 +875,7 @@
 </style>
 <footer class="text-center col-xs-12">
     <p>
-        <small>© 2021 - jarhmj - </small>
+        <small>© 2022 - jarhmj - </small>
         <small>
             <a target="_blank" rel="nofollow noopener" href="http://beian.miit.gov.cn/">苏ICP备2021014627号-1</a>
         </small>
