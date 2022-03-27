@@ -15,17 +15,17 @@
   <!-- if page has tags, then add tags to keyword -->
   
   
-  <meta name="keywords" content=",http,">
+  <meta name="keywords" content=",python,">
   <!-- page.description has higher priority -->
   <meta name="description" content="罐子，罐子的小站，罐子的博客">
   <link rel="shortcut icon" href="/img/icon.jpg">
   <title>
     
-    http身份认证介绍 | 罐子
+    判断字典里是否存在键的写法 | 罐子
     
   </title>
 
-  <link rel="canonical" href="https://jarhmj.github.io/post/http身份认证介绍/http-auth.html">
+  <link rel="canonical" href="https://jarhmj.github.io/post/check-key-in-dict/check-key-in-dict.html">
   
 <link rel="stylesheet" href="/css/geektutu.css">
 
@@ -85,27 +85,27 @@
                 
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/git学习之旅.html">git</a>
+                    <a class="float-left" href="/post/git-study.html">git</a>
+                    
+                </li>
+                
+                <li class="gkt-cate-name float-left active">
+                    <a class="float-left" href="/post/check-key-in-dict/check-key-in-dict.html">python</a>
                     
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/判断字典里是否存在键的写法/check-key-in-dict.html">python</a>
+                    <a class="float-left" href="/post/golang-lock/golang-lock.html">golang</a>
                     
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/golang/小心golang读写锁的坑.html">golang</a>
+                    <a class="float-left" href="/post/http-auth/http-auth.html">http</a>
                     
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http身份认证介绍/http-auth.html">http</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http身份认证介绍/http-auth.html">web</a>
+                    <a class="float-left" href="/post/http-auth/http-auth.html">web</a>
                     
                 </li>
                 
@@ -151,23 +151,23 @@
 <div class="float-left post-container box-shadow">
     <div class="u-arrow-wrapper hidden-xs">
         
-        <a class="float-left" href="/post/golang/小心golang读写锁的坑.html"><i class="u-arrow-left"></i></a>
+        <a class="float-left" href="/post/git-study.html"><i class="u-arrow-left"></i></a>
         
         
-        <a class="float-right" href="/post/install-k3s/install-k3s.html"><i class="u-arrow-right"></i></a>
+        <a class="float-right" href="/post/golang-lock/golang-lock.html"><i class="u-arrow-right"></i></a>
         
     </div>
     <article class="col-xs-12">
-        <h1> http身份认证介绍 </h1>
+        <h1> 判断字典里是否存在键的写法 </h1>
         
         
         <div class="hidden-lg hidden-md series_links">
-            <p> <strong> http系列文章链接：</strong></p>
+            <p> <strong> python系列文章链接：</strong></p>
             <ul>
                 
                 <li>
-                    <a href="/post/http身份认证介绍/http-auth.html">http身份认证介绍</a>
-                    <span class="post-item-date">(Apr 15, 2021)</span>
+                    <a href="/post/check-key-in-dict/check-key-in-dict.html">判断字典里是否存在键的写法</a>
+                    <span class="post-item-date">(Jun 27, 2019)</span>
                 </li>
                 
             </ul>
@@ -175,34 +175,19 @@
         
         
         <div class="gkt-article-start"></div>
-        <p>今天调试同事之前写的接口，使用的是basic认证，但是当我在浏览器里输入地址，敲回车的时候，<br>服务器直接给我返回了401的错误，完全不给我输密码的机会，我就纳闷了为啥之前的都有，现在就没了？<br>满头的问号？？？</p>
-<p>后来查阅资料才发现，http协议是定义了一套身份认证的流程，照着这个流程走就会弹窗让输入密码。</p>
-<p><img src="http%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E4%BB%8B%E7%BB%8D/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_b6d32605-1e80-4f5c-a568-d5f44552e32c.png" alt="企业微信截图_b6d32605-1e80-4f5c-a568-d5f44552e32c"></p>
-<p>流程：服务器端向客户端返回 <code>401</code>（Unauthorized，未被授权的） 状态码，并在 <code>WWW-Authenticate</code> 首部提供如何进行验证的信息，其中至少包含有一种质询方式。之后有意向证明自己身份的客户端可以在新的请求中添加  <code>Authorization</code> 首部字段进行验证，字段值为身份验证凭证信息。通常客户端会弹出一个密码框让用户填写，然后发送包含有恰当的 <code>Authorization</code> 首部的请求。</p>
-<p>简单点说就是在返回的请求头里面加上：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WWW-Authenticate: &lt;type&gt; realm=&lt;realm&gt;</span><br></pre></td></tr></table></figure>
+        <p>首先先看两个函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test1</span>(<span class="params">**kwargs</span>):</span></span><br><span class="line">    <span class="keyword">if</span> kwargs.get(<span class="string">&#x27;a&#x27;</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;存在a&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;不存在a&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test2</span>(<span class="params">**kwargs</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;a&#x27;</span> <span class="keyword">in</span> kwargs:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;存在a&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;不存在a&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
-<p>来告诉用户你要用什么认证方案进行认证</p>
-<p>然后发送的请求头里面加上：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Authorization: &lt;type&gt; &lt;credentials&gt;</span><br></pre></td></tr></table></figure>
+<p>乍一看，都没啥毛病，不就是判断kwargs这个字典里有没有这个键嘛。</p>
+<p>然后我们执行一下看看结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;test1:&#x27;</span>)</span><br><span class="line">    test1(a=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;test2:&#x27;</span>)</span><br><span class="line">    test2(a=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
 
-<p>就可以完成认证了</p>
-<p>http 所支持的认证方式有多种，其中Basic认证是最常见的，还有下面一些认证方式：</p>
-<ul>
-<li><strong>Basic</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7617">RFC 7617</a>, base64编码凭证. 详情请参阅下文.),</li>
-<li><strong>Bearer</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6750">RFC 6750</a>, bearer 令牌通过OAuth 2.0保护资源),</li>
-<li><strong>Digest</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7616">RFC 7616</a>, 只有 md5 散列 在Firefox中支持, 查看 <a target="_blank" rel="noopener" href="https://bugzilla.mozilla.org/show_bug.cgi?id=472823">bug 472823</a> 用于SHA加密支持),</li>
-<li><strong>HOBA</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7486">RFC 7486</a> (草案), <strong>H</strong>TTP <strong>O</strong>rigin-<strong>B</strong>ound 认证, 基于数字签名),</li>
-<li><strong>Mutual</strong> (查看 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/draft-ietf-httpauth-mutual-11">draft-ietf-httpauth-mutual</a>),</li>
-<li><strong>AWS4-HMAC-SHA256</strong> (查看 <a target="_blank" rel="noopener" href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html">AWS docs</a>).</li>
-</ul>
-<p>随后，我查看了gin的源码，也是如此：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BasicAuthForRealm returns a Basic HTTP Authorization middleware. It takes as arguments a map[string]string where</span></span><br><span class="line"><span class="comment">// the key is the user name and the value is the password, as well as the name of the Realm.</span></span><br><span class="line"><span class="comment">// If the realm is empty, &quot;Authorization Required&quot; will be used by default.</span></span><br><span class="line"><span class="comment">// (see http://tools.ietf.org/html/rfc2617#section-1.2)</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BasicAuthForRealm</span><span class="params">(accounts Accounts, realm <span class="keyword">string</span>)</span> <span class="title">HandlerFunc</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> realm == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		realm = <span class="string">&quot;Authorization Required&quot;</span></span><br><span class="line">	&#125;</span><br><span class="line">	realm = <span class="string">&quot;Basic realm=&quot;</span> + strconv.Quote(realm)</span><br><span class="line">	pairs := processAccounts(accounts)</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// Search user in the slice of allowed credentials</span></span><br><span class="line">		user, found := pairs.searchCredential(c.requestHeader(<span class="string">&quot;Authorization&quot;</span>))</span><br><span class="line">		<span class="keyword">if</span> !found &#123;</span><br><span class="line">			<span class="comment">// Credentials doesn&#x27;t match, we return 401 and abort handlers chain.</span></span><br><span class="line">			c.Header(<span class="string">&quot;WWW-Authenticate&quot;</span>, realm)</span><br><span class="line">			c.AbortWithStatus(http.StatusUnauthorized)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// The user credentials was found, set user&#x27;s id to key AuthUserKey in this context, the user&#x27;s id can be read later using</span></span><br><span class="line">		<span class="comment">// c.MustGet(gin.AuthUserKey).</span></span><br><span class="line">		c.Set(AuthUserKey, user)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test1:</span><br><span class="line">不存在a</span><br><span class="line">test2:</span><br><span class="line">存在a</span><br></pre></td></tr></table></figure>
 
-
-
-<p>参考链接：</p>
-<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication</a></p>
+<p>咦，test1明明传了a参数，为啥结果却是没有呢？</p>
+<p>原来test1中<code>kwargs.get(&#39;a&#39;)</code>的值为0，然后if判断的时候就走了else分支。唉，坑啊！</p>
+<p>所以以后判断字典里有没有键就老老实实用in，获取字典里键的值才用get，不然出了bug都不好排查。</p>
+<p>注：记那些年自己写的bug😭😭😭</p>
 
         
 <script src="/js/qrious.min.js"></script>
@@ -228,24 +213,20 @@
             <p>
                 <span>专题: </span>
                 
-                <a href="/series/#http">
-                    <code key="http" class="post-label">http</code>
-                </a>
-                
-                <a href="/series/#web">
-                    <code key="web" class="post-label">web</code>
+                <a href="/series/#python">
+                    <code key="python" class="post-label">python</code>
                 </a>
                 
             </p>
             
             <p>
-                <span>本文发表于 2021-04-15，最后修改于 2022-01-11。</span>
+                <span>本文发表于 2019-06-27，最后修改于 2022-03-27。</span>
             </p>
             <!-- 文章末尾的提示 start -->
             
             <p>
                 本站永久域名「 <a
-                        href="/post/http身份认证介绍/http-auth.html">jarhmj.github.io</a>
+                        href="/post/check-key-in-dict/check-key-in-dict.html">jarhmj.github.io</a>
                     」，也可搜索「 罐子 」找到我。
             </p>
             
@@ -256,10 +237,10 @@
         <hr />
         <p name="pagination" style="font-size: 1.2em">
     
-    <a class="float-left" href="/post/golang/小心golang读写锁的坑.html">上一篇 « 小心golang读写锁的坑</a>
+    <a class="float-left" href="/post/git-study.html">上一篇 « git学习之旅</a>
     
     
-    <a class="float-right" href="/post/install-k3s/install-k3s.html">下一篇 » 部署k3s之旅</a>
+    <a class="float-right" href="/post/golang-lock/golang-lock.html">下一篇 » 小心golang读写锁的坑</a>
     
 </p>
     </article>
@@ -423,20 +404,49 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#ci"
-                    title="ci">ci</a>
+                <a class="text-gray" href="/tags/#http"
+                    title="http">http</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/github-action-学习/github-action-study.html" class="title">
-                github action 学习
+            <a href="/post/http-auth/http-auth.html" class="title">
+                http身份认证介绍
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2021-08-20，</span>
-                    <span class="hidden-xs">全文363字，</span>
-                    <span>阅读约2分钟</span>
+                    <span>发表于2021-04-15，</span>
+                    <span class="hidden-xs">全文2580字，</span>
+                    <span>阅读约9分钟</span>
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
+        
+        <div class="post-preview">
+    <div class="post-img" style="background-image: url('/')"></div>
+    <div class="post-info">
+        <div class="post-info-center">
+            <div class="hidden-xs">
+                
+                
+                <span>/</span>
+                
+                <a class="text-gray" href="/tags/#golang"
+                    title="golang">golang</a>
+                <span>/</span>
+                
+                
+            </div>
+            <a href="/post/golang-lock/golang-lock.html" class="title">
+                小心golang读写锁的坑
+            </a>
+            <p class="text-gray">
+                <small>
+                    <span>发表于2020-02-28，</span>
+                    <span class="hidden-xs">全文101字，</span>
+                    <span>阅读约1分钟</span>
                 </small>
             </p>
         </div>
@@ -458,7 +468,7 @@
                 
                 
             </div>
-            <a href="/post/git学习之旅.html" class="title">
+            <a href="/post/git-study.html" class="title">
                 git学习之旅
             </a>
             <p class="text-gray">
@@ -466,35 +476,6 @@
                     <span>发表于2019-06-27，</span>
                     <span class="hidden-xs">全文504字，</span>
                     <span>阅读约2分钟</span>
-                </small>
-            </p>
-        </div>
-    </div>
-</div>
-        
-        <div class="post-preview">
-    <div class="post-img" style="background-image: url('/')"></div>
-    <div class="post-info">
-        <div class="post-info-center">
-            <div class="hidden-xs">
-                
-                
-                <span>/</span>
-                
-                <a class="text-gray" href="/tags/#关于我"
-                    title="关于我">关于我</a>
-                <span>/</span>
-                
-                
-            </div>
-            <a href="/post/about.html" class="title">
-                关于我
-            </a>
-            <p class="text-gray">
-                <small>
-                    <span>发表于2017-07-03，</span>
-                    <span class="hidden-xs">全文136字，</span>
-                    <span>阅读约1分钟</span>
                 </small>
             </p>
         </div>
@@ -536,6 +517,9 @@
     <a class="post-tag-item" href="/tags/#友链" title="友链"
         rel="1">#友链 (1) </a>
     
+    <a class="post-tag-item" href="/tags/#python" title="python"
+        rel="1">#python (1) </a>
+    
     <a class="post-tag-item" href="/tags/#ci" title="ci"
         rel="1">#ci (1) </a>
     
@@ -544,9 +528,6 @@
     
     <a class="post-tag-item" href="/tags/#k3s" title="k3s"
         rel="1">#k3s (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#python" title="python"
-        rel="1">#python (1) </a>
     
 </div>
     </div>
@@ -717,12 +698,12 @@
         
         
         <section class="gkt-sidebar-content box-shadow">
-            <strong>http</strong>
+            <strong>python</strong>
             <ul>
                 
                 <li>
-                    <a href="/post/http身份认证介绍/http-auth.html"
-                        class="gkt-sidebar-active">http身份认证介绍</a>
+                    <a href="/post/check-key-in-dict/check-key-in-dict.html"
+                        class="gkt-sidebar-active">判断字典里是否存在键的写法</a>
                     
                     <!-- Table of Contents -->
 <div id="sidebar-toc">
@@ -778,7 +759,7 @@
             <ul>
                 
                 <li>
-                    <a href="/post/github-action-学习/github-action-study.html">github action 学习</a>
+                    <a href="/post/github-action-study/github-action-study.html">github action 学习</a>
                 </li>
                 
                 <li>
@@ -786,7 +767,7 @@
                 </li>
                 
                 <li>
-                    <a href="/post/http身份认证介绍/http-auth.html">http身份认证介绍</a>
+                    <a href="/post/http-auth/http-auth.html">http身份认证介绍</a>
                 </li>
                 
             </ul>

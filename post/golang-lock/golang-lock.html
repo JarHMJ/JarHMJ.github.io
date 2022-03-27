@@ -15,17 +15,17 @@
   <!-- if page has tags, then add tags to keyword -->
   
   
-  <meta name="keywords" content=",python,">
+  <meta name="keywords" content=",golang,">
   <!-- page.description has higher priority -->
   <meta name="description" content="罐子，罐子的小站，罐子的博客">
   <link rel="shortcut icon" href="/img/icon.jpg">
   <title>
     
-    判断字典里是否存在键的写法 | 罐子
+    小心golang读写锁的坑 | 罐子
     
   </title>
 
-  <link rel="canonical" href="https://jarhmj.github.io/post/判断字典里是否存在键的写法/check-key-in-dict.html">
+  <link rel="canonical" href="https://jarhmj.github.io/post/golang-lock/golang-lock.html">
   
 <link rel="stylesheet" href="/css/geektutu.css">
 
@@ -85,27 +85,27 @@
                 
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/git学习之旅.html">git</a>
+                    <a class="float-left" href="/post/git-study.html">git</a>
+                    
+                </li>
+                
+                <li class="gkt-cate-name float-left ">
+                    <a class="float-left" href="/post/check-key-in-dict/check-key-in-dict.html">python</a>
                     
                 </li>
                 
                 <li class="gkt-cate-name float-left active">
-                    <a class="float-left" href="/post/判断字典里是否存在键的写法/check-key-in-dict.html">python</a>
+                    <a class="float-left" href="/post/golang-lock/golang-lock.html">golang</a>
                     
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/golang/小心golang读写锁的坑.html">golang</a>
+                    <a class="float-left" href="/post/http-auth/http-auth.html">http</a>
                     
                 </li>
                 
                 <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http身份认证介绍/http-auth.html">http</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http身份认证介绍/http-auth.html">web</a>
+                    <a class="float-left" href="/post/http-auth/http-auth.html">web</a>
                     
                 </li>
                 
@@ -151,23 +151,23 @@
 <div class="float-left post-container box-shadow">
     <div class="u-arrow-wrapper hidden-xs">
         
-        <a class="float-left" href="/post/git学习之旅.html"><i class="u-arrow-left"></i></a>
+        <a class="float-left" href="/post/check-key-in-dict/check-key-in-dict.html"><i class="u-arrow-left"></i></a>
         
         
-        <a class="float-right" href="/post/golang/小心golang读写锁的坑.html"><i class="u-arrow-right"></i></a>
+        <a class="float-right" href="/post/http-auth/http-auth.html"><i class="u-arrow-right"></i></a>
         
     </div>
     <article class="col-xs-12">
-        <h1> 判断字典里是否存在键的写法 </h1>
+        <h1> 小心golang读写锁的坑 </h1>
         
         
         <div class="hidden-lg hidden-md series_links">
-            <p> <strong> python系列文章链接：</strong></p>
+            <p> <strong> golang系列文章链接：</strong></p>
             <ul>
                 
                 <li>
-                    <a href="/post/判断字典里是否存在键的写法/check-key-in-dict.html">判断字典里是否存在键的写法</a>
-                    <span class="post-item-date">(Jun 27, 2019)</span>
+                    <a href="/post/golang-lock/golang-lock.html">小心golang读写锁的坑</a>
+                    <span class="post-item-date">(Feb 28, 2020)</span>
                 </li>
                 
             </ul>
@@ -175,19 +175,7 @@
         
         
         <div class="gkt-article-start"></div>
-        <p>首先先看两个函数</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test1</span>(<span class="params">**kwargs</span>):</span></span><br><span class="line">    <span class="keyword">if</span> kwargs.get(<span class="string">&#x27;a&#x27;</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;存在a&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;不存在a&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test2</span>(<span class="params">**kwargs</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;a&#x27;</span> <span class="keyword">in</span> kwargs:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;存在a&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;不存在a&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>乍一看，都没啥毛病，不就是判断kwargs这个字典里有没有这个键嘛。</p>
-<p>然后我们执行一下看看结果：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;test1:&#x27;</span>)</span><br><span class="line">    test1(a=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;test2:&#x27;</span>)</span><br><span class="line">    test2(a=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test1:</span><br><span class="line">不存在a</span><br><span class="line">test2:</span><br><span class="line">存在a</span><br></pre></td></tr></table></figure>
-
-<p>咦，test1明明传了a参数，为啥结果却是没有呢？</p>
-<p>原来test1中<code>kwargs.get(&#39;a&#39;)</code>的值为0，然后if判断的时候就走了else分支。唉，坑啊！</p>
-<p>所以以后判断字典里有没有键就老老实实用in，获取字典里键的值才用get，不然出了bug都不好排查。</p>
-<p>注：记那些年自己写的bug😭😭😭</p>
+        <p>避免在递归获取读锁</p>
 
         
 <script src="/js/qrious.min.js"></script>
@@ -213,20 +201,20 @@
             <p>
                 <span>专题: </span>
                 
-                <a href="/series/#python">
-                    <code key="python" class="post-label">python</code>
+                <a href="/series/#golang">
+                    <code key="golang" class="post-label">golang</code>
                 </a>
                 
             </p>
             
             <p>
-                <span>本文发表于 2019-06-27，最后修改于 2022-01-11。</span>
+                <span>本文发表于 2020-02-28，最后修改于 2022-03-27。</span>
             </p>
             <!-- 文章末尾的提示 start -->
             
             <p>
                 本站永久域名「 <a
-                        href="/post/判断字典里是否存在键的写法/check-key-in-dict.html">jarhmj.github.io</a>
+                        href="/post/golang-lock/golang-lock.html">jarhmj.github.io</a>
                     」，也可搜索「 罐子 」找到我。
             </p>
             
@@ -237,10 +225,10 @@
         <hr />
         <p name="pagination" style="font-size: 1.2em">
     
-    <a class="float-left" href="/post/git学习之旅.html">上一篇 « git学习之旅</a>
+    <a class="float-left" href="/post/check-key-in-dict/check-key-in-dict.html">上一篇 « 判断字典里是否存在键的写法</a>
     
     
-    <a class="float-right" href="/post/golang/小心golang读写锁的坑.html">下一篇 » 小心golang读写锁的坑</a>
+    <a class="float-right" href="/post/http-auth/http-auth.html">下一篇 » http身份认证介绍</a>
     
 </p>
     </article>
@@ -404,19 +392,19 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#k3s"
-                    title="k3s">k3s</a>
+                <a class="text-gray" href="/tags/#http"
+                    title="http">http</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/install-k3s/install-k3s.html" class="title">
-                部署k3s之旅
+            <a href="/post/http-auth/http-auth.html" class="title">
+                http身份认证介绍
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2021-08-15，</span>
-                    <span class="hidden-xs">全文2691字，</span>
+                    <span>发表于2021-04-15，</span>
+                    <span class="hidden-xs">全文2580字，</span>
                     <span>阅读约9分钟</span>
                 </small>
             </p>
@@ -433,20 +421,20 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#http"
-                    title="http">http</a>
+                <a class="text-gray" href="/tags/#golang"
+                    title="golang">golang</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/http身份认证介绍/http-auth.html" class="title">
-                http身份认证介绍
+            <a href="/post/golang-lock/golang-lock.html" class="title">
+                小心golang读写锁的坑
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2021-04-15，</span>
-                    <span class="hidden-xs">全文2667字，</span>
-                    <span>阅读约9分钟</span>
+                    <span>发表于2020-02-28，</span>
+                    <span class="hidden-xs">全文101字，</span>
+                    <span>阅读约1分钟</span>
                 </small>
             </p>
         </div>
@@ -517,6 +505,9 @@
     <a class="post-tag-item" href="/tags/#友链" title="友链"
         rel="1">#友链 (1) </a>
     
+    <a class="post-tag-item" href="/tags/#python" title="python"
+        rel="1">#python (1) </a>
+    
     <a class="post-tag-item" href="/tags/#ci" title="ci"
         rel="1">#ci (1) </a>
     
@@ -525,9 +516,6 @@
     
     <a class="post-tag-item" href="/tags/#k3s" title="k3s"
         rel="1">#k3s (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#python" title="python"
-        rel="1">#python (1) </a>
     
 </div>
     </div>
@@ -698,12 +686,12 @@
         
         
         <section class="gkt-sidebar-content box-shadow">
-            <strong>python</strong>
+            <strong>golang</strong>
             <ul>
                 
                 <li>
-                    <a href="/post/判断字典里是否存在键的写法/check-key-in-dict.html"
-                        class="gkt-sidebar-active">判断字典里是否存在键的写法</a>
+                    <a href="/post/golang-lock/golang-lock.html"
+                        class="gkt-sidebar-active">小心golang读写锁的坑</a>
                     
                     <!-- Table of Contents -->
 <div id="sidebar-toc">
@@ -759,7 +747,7 @@
             <ul>
                 
                 <li>
-                    <a href="/post/github-action-学习/github-action-study.html">github action 学习</a>
+                    <a href="/post/github-action-study/github-action-study.html">github action 学习</a>
                 </li>
                 
                 <li>
@@ -767,7 +755,7 @@
                 </li>
                 
                 <li>
-                    <a href="/post/http身份认证介绍/http-auth.html">http身份认证介绍</a>
+                    <a href="/post/http-auth/http-auth.html">http身份认证介绍</a>
                 </li>
                 
             </ul>
