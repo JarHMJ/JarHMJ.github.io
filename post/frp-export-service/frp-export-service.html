@@ -15,17 +15,17 @@
   <!-- if page has tags, then add tags to keyword -->
   
   
-  <meta name="keywords" content=",traefik,">
+  <meta name="keywords" content=",frp,">
   <!-- page.description has higher priority -->
   <meta name="description" content="罐子，罐子的小站，罐子的博客">
   <link rel="shortcut icon" href="/img/icon.jpg">
   <title>
     
-    traefik ingress 使用指南 | 罐子
+    frp 暴露内网k8s集群服务 | 罐子
     
   </title>
 
-  <link rel="canonical" href="https://jarhmj.github.io/post/traefik-ingress/traefik-ingress.html">
+  <link rel="canonical" href="https://jarhmj.github.io/post/frp-export-service/frp-export-service.html">
   
 <link rel="stylesheet" href="/css/geektutu.css">
 
@@ -151,14 +151,12 @@
 <div class="float-left post-container box-shadow">
     <div class="u-arrow-wrapper hidden-xs">
         
-        <a class="float-left" href="/post/github-action-study/github-action-study.html"><i class="u-arrow-left"></i></a>
+        <a class="float-left" href="/post/traefik-ingress/traefik-ingress.html"><i class="u-arrow-left"></i></a>
         
-        
-        <a class="float-right" href="/post/frp-export-service/frp-export-service.html"><i class="u-arrow-right"></i></a>
         
     </div>
     <article class="col-xs-12">
-        <h1> traefik ingress 使用指南 </h1>
+        <h1> frp 暴露内网k8s集群服务 </h1>
         
         
         <div class="hidden-lg hidden-md series_links">
@@ -185,22 +183,35 @@
         
         
         <div class="gkt-article-start"></div>
-        <p><img src="traefik-ingress/image-20220630112815-gd519fo.png" alt="image.png"></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/containous/traefik">Traefik</a> 是一个开源的可以使服务发布变得轻松有趣的边缘路由器。</p>
-<p>下面就介绍两种在k8s中使用它的方式</p>
-<h1 id="IngressRoute"><a href="#IngressRoute" class="headerlink" title="IngressRoute"></a>IngressRoute</h1><p>IngressRoute 是traefik自定义的CR，作用和k8s中的Ingress差不多，对外暴露集群内的服务。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># http</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">traefik.containo.us/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">IngressRoute</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">simpleingressroute</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">entryPoints:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">web</span></span><br><span class="line">  <span class="attr">routes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">match:</span> <span class="string">Host(`your.example.com`)</span> <span class="string">&amp;&amp;</span> <span class="string">PathPrefix(`/notls`)</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">Rule</span></span><br><span class="line">    <span class="attr">services:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">whoami</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># https</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">traefik.containo.us/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">IngressRoute</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">ingressroutetls</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">entryPoints:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">websecure</span></span><br><span class="line">  <span class="attr">routes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">match:</span> <span class="string">Host(`your.example.com`)</span> <span class="string">&amp;&amp;</span> <span class="string">PathPrefix(`/tls`)</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">Rule</span></span><br><span class="line">    <span class="attr">services:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">whoami</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">  <span class="attr">tls:</span></span><br><span class="line">    <span class="attr">certResolver:</span> <span class="string">myresolver</span></span><br></pre></td></tr></table></figure>
+        <p>最近想着部署一套面试系统用来简化自己的面试工作，首先第一个问题就把我难住了——没有资源，本人只有一台小弱鸡没法来部署这个面试系统，于是想到了部门的内网机器😏，利用内网穿透技术把服务暴露出去。</p>
+<p>之前就久闻<a target="_blank" rel="noopener" href="https://gofrp.org/docs/">frp</a>的大名，golang编写的内网穿透服务，支持 TCP、UDP、HTTP、HTTPS 等多种协议，接下来就用这个来试一下吧。</p>
+<p>目前，我的公网机器上有个k3集群，我的所有个人服务都部署在k3s中，所以我也会把frp的服务端frps部署在k3s中，方便管理，然后在内网的k8s集群内部署frp的客户端frpc，这样就能把内网的服务给暴露到公网，架构大概如下图所示：</p>
+<p><img src="frp-export-service/image-20220630180516-u0dy0ab.png" alt="image.png"></p>
+<h1 id="操作步骤："><a href="#操作步骤：" class="headerlink" title="操作步骤："></a>操作步骤：</h1><h2 id="frps-部署配置"><a href="#frps-部署配置" class="headerlink" title="frps 部署配置"></a>frps 部署配置</h2><p>frps 服务端程序需要部署在公网集群上，通过deployment部署，yaml如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">frps</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">frps</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">snowdreamtech/frps:0.33.0</span></span><br><span class="line">          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">          <span class="attr">volumeMounts:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/etc/frp</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">      <span class="attr">restartPolicy:</span> <span class="string">Always</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">          <span class="attr">configMap:</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">frps</span></span><br></pre></td></tr></table></figure>
 
+<p>frps 服务端程序的配置文件通过configMap挂载进pod内的<code>/etc/frp</code>下，所以我们再创建一个configMap:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">frps.ini:</span> <span class="string">|-</span></span><br><span class="line"><span class="string">    [common]</span></span><br><span class="line"><span class="string">    bind_port=31000</span></span><br><span class="line"><span class="string">    # 服务端和客户端的 common 配置中的 token 参数一致则身份验证通过。</span></span><br><span class="line"><span class="string">    token=xxxxxxx</span></span><br><span class="line"><span class="string">    # 为了防止端口被滥用，可以手动指定允许哪些端口被使用</span></span><br><span class="line"><span class="string">    allow_ports=31001-31100</span></span><br><span class="line"><span class="string">    # trace, debug, info, warn, error</span></span><br><span class="line"><span class="string">    log_level = info</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="Ingress"><a href="#Ingress" class="headerlink" title="Ingress"></a>Ingress</h1><p>另外一种方式就是使用k8s原生的ingress资源，配置上和Nginx Ingress大同小异，有一些功能需要配合Annotations使用</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启https</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myingress</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.entrypoints:</span> <span class="string">websecure</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.tls:</span> <span class="literal">true</span>    <span class="comment"># 开启证书</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">example.com</span></span><br><span class="line">      <span class="attr">http:</span></span><br><span class="line">        <span class="attr">paths:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/bar</span></span><br><span class="line">            <span class="attr">pathType:</span> <span class="string">Exact</span></span><br><span class="line">            <span class="attr">backend:</span></span><br><span class="line">              <span class="attr">service:</span></span><br><span class="line">                <span class="attr">name:</span>  <span class="string">whoami</span></span><br><span class="line">                <span class="attr">port:</span></span><br><span class="line">                  <span class="attr">number:</span> <span class="number">80</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/foo</span></span><br><span class="line">            <span class="attr">pathType:</span> <span class="string">Exact</span></span><br><span class="line">            <span class="attr">backend:</span></span><br><span class="line">              <span class="attr">service:</span></span><br><span class="line">                <span class="attr">name:</span>  <span class="string">whoami</span></span><br><span class="line">                <span class="attr">port:</span></span><br><span class="line">                  <span class="attr">number:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+<p>frps 配置文件frps.ini更详细的配置可以在<a target="_blank" rel="noopener" href="https://gofrp.org/docs/reference/server-configures/">服务端配置 | frp (gofrp.org)</a>查看。</p>
+<p>frps 服务端程序bind_port 为 31000，此端口是用来和frpc客户端通信的，所以公网集群需要开通这个端口，把frps服务暴露到公网上，接着为frps创建一个nodeport类型的service，来暴露服务：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">31000</span></span><br><span class="line">      <span class="attr">nodePort:</span> <span class="number">31000</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br></pre></td></tr></table></figure>
 
+<h2 id="frpc-部署配置"><a href="#frpc-部署配置" class="headerlink" title="frpc 部署配置"></a>frpc 部署配置</h2><p>接下来，我们就可以来配置客户端程序了，frpc客户端还是通过deployment来部署，配置文件使用configMap来配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">frpc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">frpc</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">          <span class="attr">image:</span> <span class="number">10.29</span><span class="number">.3</span><span class="number">.18</span><span class="string">/docker.io/snowdreamtech/frpc:0.33.0</span></span><br><span class="line">          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">          <span class="attr">volumeMounts:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/etc/frp</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">      <span class="attr">restartPolicy:</span> <span class="string">Always</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">          <span class="attr">configMap:</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">frpc</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frpc</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">frpc.ini:</span> <span class="string">|-</span></span><br><span class="line"><span class="string">    [common]</span></span><br><span class="line"><span class="string">    token=xxxxxx</span></span><br><span class="line"><span class="string">    server_addr = &quot;公网集群的node ip&quot;</span></span><br><span class="line"><span class="string">    server_port = 31000</span></span><br><span class="line"><span class="string">    log_level=info</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
 
-<p>其它的使用姿势：</p>
-<p>后续填坑。。。</p>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/#kind-ingressroute">Routing Configuration for Traefik CRD - Traefik</a></p>
-<p><a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/routing/providers/kubernetes-ingress/#enabling-tls-via-annotations">Kubernetes Ingress Routing Configuration - Traefik</a></p>
+<p>配置中的<code>token</code>是用来认证的，需要和frps配置的一样; <code>server_addr</code> 是公网集群的node ip，<code>server_port</code>是之前暴露的服务端端口。</p>
+<p>如果你跟着一起配置到这里，那么恭喜你已经完成了一大半了，frp的基础配置已经完成。接下来的那就是暴露内网的服务了。</p>
+<h2 id="暴露内网服务"><a href="#暴露内网服务" class="headerlink" title="暴露内网服务"></a>暴露内网服务</h2><p>假设在内网集群内有个api的服务，现在我们需要通过刚才配置的frp来暴露出去。接下来更新一下frpc的配置，</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frpc</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">frpc.ini:</span> <span class="string">|-</span></span><br><span class="line"><span class="string">    [common]</span></span><br><span class="line"><span class="string">    token=xxxxxx</span></span><br><span class="line"><span class="string">    server_addr = &quot;公网集群的node ip&quot;</span></span><br><span class="line"><span class="string">    server_port = 31000</span></span><br><span class="line"><span class="string">    log_level=info</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">    [<span class="string">guestbook-ui</span>]</span><br><span class="line">    <span class="comment">#/api</span></span><br><span class="line">    <span class="string">type</span> <span class="string">=</span> <span class="string">tcp</span></span><br><span class="line">    <span class="string">local_ip=guestbook-ui.default</span></span><br><span class="line">    <span class="string">local_port=80</span></span><br><span class="line">    <span class="string">remote_port=31001</span></span><br></pre></td></tr></table></figure>
+
+<p>新增了guestbook-ui 服务的配置，<code>type</code> 为tcp，<code>local_ip</code>设置为guestbook-ui 的svc地址，<code>local_port</code>为guestbook-ui 的svc的端口，<code>remote_port</code>为映射到frps端的端口，即访问frps的31001端口服务就能访问到guestbook-ui。</p>
+<p>接下来，更新一下frps服务端的配置。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps-port</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">31001</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">&quot;port-31001&quot;</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps-port</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.tls.certresolver:</span> <span class="string">letsencrypt</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.entrypoints:</span> <span class="string">web</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.middlewares:</span> <span class="string">kube-system-redirect@kubernetescrd</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">&quot;example.com&quot;</span></span><br><span class="line">      <span class="attr">http:</span></span><br><span class="line">        <span class="attr">paths:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span></span><br><span class="line">            <span class="attr">pathType:</span> <span class="string">Prefix</span></span><br><span class="line">            <span class="attr">backend:</span></span><br><span class="line">              <span class="attr">service:</span></span><br><span class="line">                <span class="attr">name:</span> <span class="string">frps-port</span></span><br><span class="line">                <span class="attr">port:</span></span><br><span class="line">                  <span class="attr">number:</span> <span class="number">31001</span></span><br></pre></td></tr></table></figure>
+
+<p>frps服务端的配置主要是把guestbook-ui的remote_port的服务通过ingress暴露到公网，当然通过nodeport的方式也可以。</p>
+<h2 id="后续计划："><a href="#后续计划：" class="headerlink" title="后续计划："></a>后续计划：</h2><p>其实这个方法有个弊端，就是修改完配置后每次都要重启容器，没法热加载，后续再优化。。。🍻</p>
+<h1 id="参考文档："><a href="#参考文档：" class="headerlink" title="参考文档："></a>参考文档：</h1><p><a target="_blank" rel="noopener" href="https://www.bookstack.cn/read/frp/README_zh.md">frp - 《frp v0.27 中文文档》 - 书栈网 · BookStack</a></p>
 
         
 <script src="/js/qrious.min.js"></script>
@@ -239,7 +250,7 @@
             
             <p>
                 本站永久域名「 <a
-                        href="/post/traefik-ingress/traefik-ingress.html">jarhmj.github.io</a>
+                        href="/post/frp-export-service/frp-export-service.html">jarhmj.github.io</a>
                     」，也可搜索「 罐子 」找到我。
             </p>
             
@@ -250,10 +261,8 @@
         <hr />
         <p name="pagination" style="font-size: 1.2em">
     
-    <a class="float-left" href="/post/github-action-study/github-action-study.html">上一篇 « github action 学习</a>
+    <a class="float-left" href="/post/traefik-ingress/traefik-ingress.html">上一篇 « traefik ingress 使用指南</a>
     
-    
-    <a class="float-right" href="/post/frp-export-service/frp-export-service.html">下一篇 » frp 暴露内网k8s集群服务</a>
     
 </p>
     </article>
@@ -417,78 +426,78 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#ci"
-                    title="ci">ci</a>
+                <a class="text-gray" href="/tags/#frp"
+                    title="frp">frp</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/github-action-study/github-action-study.html" class="title">
-                github action 学习
+            <a href="/post/frp-export-service/frp-export-service.html" class="title">
+                frp 暴露内网k8s集群服务
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2021-08-20，</span>
-                    <span class="hidden-xs">全文363字，</span>
+                    <span>发表于2022-06-30，</span>
+                    <span class="hidden-xs">全文4513字，</span>
+                    <span>阅读约16分钟</span>
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
+        
+        <div class="post-preview">
+    <div class="post-img" style="background-image: url('/')"></div>
+    <div class="post-info">
+        <div class="post-info-center">
+            <div class="hidden-xs">
+                
+                
+                <span>/</span>
+                
+                <a class="text-gray" href="/tags/#traefik"
+                    title="traefik">traefik</a>
+                <span>/</span>
+                
+                
+            </div>
+            <a href="/post/traefik-ingress/traefik-ingress.html" class="title">
+                traefik ingress 使用指南
+            </a>
+            <p class="text-gray">
+                <small>
+                    <span>发表于2022-06-30，</span>
+                    <span class="hidden-xs">全文2022字，</span>
+                    <span>阅读约7分钟</span>
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
+        
+        <div class="post-preview">
+    <div class="post-img" style="background-image: url('/')"></div>
+    <div class="post-info">
+        <div class="post-info-center">
+            <div class="hidden-xs">
+                
+                
+                <span>/</span>
+                
+                <a class="text-gray" href="/tags/#git"
+                    title="git">git</a>
+                <span>/</span>
+                
+                
+            </div>
+            <a href="/post/git-study.html" class="title">
+                git学习之旅
+            </a>
+            <p class="text-gray">
+                <small>
+                    <span>发表于2019-06-27，</span>
+                    <span class="hidden-xs">全文504字，</span>
                     <span>阅读约2分钟</span>
-                </small>
-            </p>
-        </div>
-    </div>
-</div>
-        
-        <div class="post-preview">
-    <div class="post-img" style="background-image: url('/')"></div>
-    <div class="post-info">
-        <div class="post-info-center">
-            <div class="hidden-xs">
-                
-                
-                <span>/</span>
-                
-                <a class="text-gray" href="/tags/#http"
-                    title="http">http</a>
-                <span>/</span>
-                
-                
-            </div>
-            <a href="/post/http-auth/http-auth.html" class="title">
-                http身份认证介绍
-            </a>
-            <p class="text-gray">
-                <small>
-                    <span>发表于2021-04-15，</span>
-                    <span class="hidden-xs">全文2580字，</span>
-                    <span>阅读约9分钟</span>
-                </small>
-            </p>
-        </div>
-    </div>
-</div>
-        
-        <div class="post-preview">
-    <div class="post-img" style="background-image: url('/')"></div>
-    <div class="post-info">
-        <div class="post-info-center">
-            <div class="hidden-xs">
-                
-                
-                <span>/</span>
-                
-                <a class="text-gray" href="/tags/#关于我"
-                    title="关于我">关于我</a>
-                <span>/</span>
-                
-                
-            </div>
-            <a href="/post/about.html" class="title">
-                关于我
-            </a>
-            <p class="text-gray">
-                <small>
-                    <span>发表于2017-07-03，</span>
-                    <span class="hidden-xs">全文171字，</span>
-                    <span>阅读约1分钟</span>
                 </small>
             </p>
         </div>
@@ -728,14 +737,20 @@
                 
                 <li>
                     <a href="/post/traefik-ingress/traefik-ingress.html"
-                        class="gkt-sidebar-active">traefik ingress 使用指南</a>
+                        class="">traefik ingress 使用指南</a>
+                    
+                </li>
+                
+                <li>
+                    <a href="/post/frp-export-service/frp-export-service.html"
+                        class="gkt-sidebar-active">frp 暴露内网k8s集群服务</a>
                     
                     <!-- Table of Contents -->
 <div id="sidebar-toc">
   <!-- TOC  -->
   
   
-  <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#IngressRoute"><span class="toc-nav-text">IngressRoute</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Ingress"><span class="toc-nav-text">Ingress</span></a></li></ol>
+  <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-nav-text">操作步骤：</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#frps-%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE"><span class="toc-nav-text">frps 部署配置</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#frpc-%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE"><span class="toc-nav-text">frpc 部署配置</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9A%B4%E9%9C%B2%E5%86%85%E7%BD%91%E6%9C%8D%E5%8A%A1"><span class="toc-nav-text">暴露内网服务</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%90%8E%E7%BB%AD%E8%AE%A1%E5%88%92%EF%BC%9A"><span class="toc-nav-text">后续计划：</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3%EF%BC%9A"><span class="toc-nav-text">参考文档：</span></a></li></ol>
   
 </div>
 
@@ -774,12 +789,6 @@
     })
   })();
 </script>
-                    
-                </li>
-                
-                <li>
-                    <a href="/post/frp-export-service/frp-export-service.html"
-                        class="">frp 暴露内网k8s集群服务</a>
                     
                 </li>
                 

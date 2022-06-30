@@ -15,14 +15,39 @@
     <atom:link href="https://jarhmj.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <description>罐子，罐子的小站，罐子的博客</description>
-    <pubDate>Thu, 30 Jun 2022 08:23:19 GMT</pubDate>
+    <pubDate>Thu, 30 Jun 2022 15:16:47 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>frp 暴露内网k8s集群服务</title>
+      <link>https://jarhmj.github.io/post/frp-export-service/frp-export-service.html</link>
+      <guid>https://jarhmj.github.io/post/frp-export-service/frp-export-service.html</guid>
+      <pubDate>Thu, 30 Jun 2022 23:06:06 GMT</pubDate>
+      
+        
+        
+      <description>&lt;p&gt;最近想着部署一套面试系统用来简化自己的面试工作，首先第一个问题就把我难住了——没有资源，本人只有一台小弱鸡没法来部署这个面试系统，于是想到了部门的内网机器😏，利用内网穿透技术把服务暴露出去。&lt;/p&gt;
+&lt;p&gt;之前就久闻&lt;a href=&quot;https://gofrp.org/d</description>
+        
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/frp/">frp</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/frp-export-service/frp-export-service.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>traefik ingress 使用指南</title>
       <link>https://jarhmj.github.io/post/traefik-ingress/traefik-ingress.html</link>
       <guid>https://jarhmj.github.io/post/traefik-ingress/traefik-ingress.html</guid>
-      <pubDate>Thu, 30 Jun 2022 23:12:21 GMT</pubDate>
+      <pubDate>Thu, 30 Jun 2022 12:12:21 GMT</pubDate>
       
         
         
