@@ -15,7 +15,7 @@
     <atom:link href="https://jarhmj.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <description>罐子，罐子的小站，罐子的博客</description>
-    <pubDate>Thu, 30 Jun 2022 04:35:55 GMT</pubDate>
+    <pubDate>Thu, 30 Jun 2022 08:23:19 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -26,8 +26,8 @@
       
         
         
-      <description>&lt;p&gt;&lt;img src=&quot;assets/image-20220630112815-gd519fo.png&quot; alt=&quot;image.png&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/containous/traefik&quot;&gt;Traefik&lt;/a&gt; 是一</description>
+      <description>&lt;p&gt;&lt;img src=&quot;traefik-ingress/image-20220630112815-gd519fo.png&quot; alt=&quot;image.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/containous/traefik&quot;&gt;Traef</description>
         
       
       
