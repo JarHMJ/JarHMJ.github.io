@@ -15,17 +15,17 @@
   <!-- if page has tags, then add tags to keyword -->
   
   
-  <meta name="keywords" content=",友链,">
+  <meta name="keywords" content=",traefik,">
   <!-- page.description has higher priority -->
-  <meta name="description" content="jarhmj的友链">
+  <meta name="description" content="罐子，罐子的小站，罐子的博客">
   <link rel="shortcut icon" href="/img/icon.jpg">
   <title>
     
-    友情链接 | 罐子
+    traefik ingress 使用指南 | 罐子
     
   </title>
 
-  <link rel="canonical" href="https://jarhmj.github.io/post/link.html">
+  <link rel="canonical" href="https://jarhmj.github.io/post/traefik-ingress/traefik-ingress.html">
   
 <link rel="stylesheet" href="/css/geektutu.css">
 
@@ -109,7 +109,7 @@
                     
                 </li>
                 
-                <li class="gkt-cate-name float-left ">
+                <li class="gkt-cate-name float-left active">
                     <a class="float-left" href="/post/install-k3s/install-k3s.html">云原生</a>
                     
                 </li>
@@ -151,17 +151,49 @@
 <div class="float-left post-container box-shadow">
     <div class="u-arrow-wrapper hidden-xs">
         
+        <a class="float-left" href="/post/github-action-study/github-action-study.html"><i class="u-arrow-left"></i></a>
         
-        <a class="float-right" href="/post/about.html"><i class="u-arrow-right"></i></a>
         
     </div>
     <article class="col-xs-12">
-        <h1> 友情链接 </h1>
+        <h1> traefik ingress 使用指南 </h1>
         
+        
+        <div class="hidden-lg hidden-md series_links">
+            <p> <strong> 云原生系列文章链接：</strong></p>
+            <ul>
+                
+                <li>
+                    <a href="/post/install-k3s/install-k3s.html">部署k3s之旅</a>
+                    <span class="post-item-date">(Aug 15, 2021)</span>
+                </li>
+                
+                <li>
+                    <a href="/post/traefik-ingress/traefik-ingress.html">traefik ingress 使用指南</a>
+                    <span class="post-item-date">(Jun 30, 2022)</span>
+                </li>
+                
+            </ul>
+        </div>
         
         
         <div class="gkt-article-start"></div>
-        <p>还没有，希望有相互交换的朋友联系我。</p>
+        <p><img src="assets/image-20220630112815-gd519fo.png" alt="image.png"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/containous/traefik">Traefik</a> 是一个开源的可以使服务发布变得轻松有趣的边缘路由器。</p>
+<p>下面就介绍两种在k8s中使用它的方式</p>
+<h1 id="IngressRoute"><a href="#IngressRoute" class="headerlink" title="IngressRoute"></a>IngressRoute</h1><p>IngressRoute 是traefik自定义的CR，作用和k8s中的Ingress差不多，对外暴露集群内的服务。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># http</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">traefik.containo.us/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">IngressRoute</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">simpleingressroute</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">entryPoints:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">web</span></span><br><span class="line">  <span class="attr">routes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">match:</span> <span class="string">Host(`your.example.com`)</span> <span class="string">&amp;&amp;</span> <span class="string">PathPrefix(`/notls`)</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">Rule</span></span><br><span class="line">    <span class="attr">services:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">whoami</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># https</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">traefik.containo.us/v1alpha1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">IngressRoute</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">ingressroutetls</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">entryPoints:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">websecure</span></span><br><span class="line">  <span class="attr">routes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">match:</span> <span class="string">Host(`your.example.com`)</span> <span class="string">&amp;&amp;</span> <span class="string">PathPrefix(`/tls`)</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">Rule</span></span><br><span class="line">    <span class="attr">services:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">whoami</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">  <span class="attr">tls:</span></span><br><span class="line">    <span class="attr">certResolver:</span> <span class="string">myresolver</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="Ingress"><a href="#Ingress" class="headerlink" title="Ingress"></a>Ingress</h1><p>另外一种方式就是使用k8s原生的ingress资源，配置上和Nginx Ingress大同小异，有一些功能需要配合Annotations使用</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启https</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myingress</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.entrypoints:</span> <span class="string">websecure</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.tls:</span> <span class="literal">true</span>    <span class="comment"># 开启证书</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">example.com</span></span><br><span class="line">      <span class="attr">http:</span></span><br><span class="line">        <span class="attr">paths:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/bar</span></span><br><span class="line">            <span class="attr">pathType:</span> <span class="string">Exact</span></span><br><span class="line">            <span class="attr">backend:</span></span><br><span class="line">              <span class="attr">service:</span></span><br><span class="line">                <span class="attr">name:</span>  <span class="string">whoami</span></span><br><span class="line">                <span class="attr">port:</span></span><br><span class="line">                  <span class="attr">number:</span> <span class="number">80</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/foo</span></span><br><span class="line">            <span class="attr">pathType:</span> <span class="string">Exact</span></span><br><span class="line">            <span class="attr">backend:</span></span><br><span class="line">              <span class="attr">service:</span></span><br><span class="line">                <span class="attr">name:</span>  <span class="string">whoami</span></span><br><span class="line">                <span class="attr">port:</span></span><br><span class="line">                  <span class="attr">number:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+
+<p>其它的使用姿势：</p>
+<p>后续填坑。。。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/#kind-ingressroute">Routing Configuration for Traefik CRD - Traefik</a></p>
+<p><a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/routing/providers/kubernetes-ingress/#enabling-tls-via-annotations">Kubernetes Ingress Routing Configuration - Traefik</a></p>
 
         
 <script src="/js/qrious.min.js"></script>
@@ -185,13 +217,22 @@
         <div>
             
             <p>
-                <span>本文发表于 2017-07-03，最后修改于 2022-06-30。</span>
+                <span>专题: </span>
+                
+                <a href="/series/#云原生">
+                    <code key="云原生" class="post-label">云原生</code>
+                </a>
+                
+            </p>
+            
+            <p>
+                <span>本文发表于 2022-06-30，最后修改于 2022-06-30。</span>
             </p>
             <!-- 文章末尾的提示 start -->
             
             <p>
                 本站永久域名「 <a
-                        href="/post/link.html">jarhmj.github.io</a>
+                        href="/post/traefik-ingress/traefik-ingress.html">jarhmj.github.io</a>
                     」，也可搜索「 罐子 」找到我。
             </p>
             
@@ -202,8 +243,8 @@
         <hr />
         <p name="pagination" style="font-size: 1.2em">
     
+    <a class="float-left" href="/post/github-action-study/github-action-study.html">上一篇 « github action 学习</a>
     
-    <a class="float-right" href="/post/about.html">下一篇 » 关于我</a>
     
 </p>
     </article>
@@ -367,20 +408,49 @@
                 
                 <span>/</span>
                 
-                <a class="text-gray" href="/tags/#http"
-                    title="http">http</a>
+                <a class="text-gray" href="/tags/#traefik"
+                    title="traefik">traefik</a>
                 <span>/</span>
                 
                 
             </div>
-            <a href="/post/http-auth/http-auth.html" class="title">
-                http身份认证介绍
+            <a href="/post/traefik-ingress/traefik-ingress.html" class="title">
+                traefik ingress 使用指南
             </a>
             <p class="text-gray">
                 <small>
-                    <span>发表于2021-04-15，</span>
-                    <span class="hidden-xs">全文2580字，</span>
-                    <span>阅读约9分钟</span>
+                    <span>发表于2022-06-30，</span>
+                    <span class="hidden-xs">全文2013字，</span>
+                    <span>阅读约7分钟</span>
+                </small>
+            </p>
+        </div>
+    </div>
+</div>
+        
+        <div class="post-preview">
+    <div class="post-img" style="background-image: url('/')"></div>
+    <div class="post-info">
+        <div class="post-info-center">
+            <div class="hidden-xs">
+                
+                
+                <span>/</span>
+                
+                <a class="text-gray" href="/tags/#ci"
+                    title="ci">ci</a>
+                <span>/</span>
+                
+                
+            </div>
+            <a href="/post/github-action-study/github-action-study.html" class="title">
+                github action 学习
+            </a>
+            <p class="text-gray">
+                <small>
+                    <span>发表于2021-08-20，</span>
+                    <span class="hidden-xs">全文363字，</span>
+                    <span>阅读约2分钟</span>
                 </small>
             </p>
         </div>
@@ -410,35 +480,6 @@
                     <span>发表于2019-06-27，</span>
                     <span class="hidden-xs">全文676字，</span>
                     <span>阅读约3分钟</span>
-                </small>
-            </p>
-        </div>
-    </div>
-</div>
-        
-        <div class="post-preview">
-    <div class="post-img" style="background-image: url('/')"></div>
-    <div class="post-info">
-        <div class="post-info-center">
-            <div class="hidden-xs">
-                
-                
-                <span>/</span>
-                
-                <a class="text-gray" href="/tags/#关于我"
-                    title="关于我">关于我</a>
-                <span>/</span>
-                
-                
-            </div>
-            <a href="/post/about.html" class="title">
-                关于我
-            </a>
-            <p class="text-gray">
-                <small>
-                    <span>发表于2017-07-03，</span>
-                    <span class="hidden-xs">全文171字，</span>
-                    <span>阅读约1分钟</span>
                 </small>
             </p>
         </div>
@@ -663,6 +704,70 @@
 </div></section>
         
         
+        <section class="gkt-sidebar-content box-shadow">
+            <strong>云原生</strong>
+            <ul>
+                
+                <li>
+                    <a href="/post/install-k3s/install-k3s.html"
+                        class="">部署k3s之旅</a>
+                    
+                </li>
+                
+                <li>
+                    <a href="/post/traefik-ingress/traefik-ingress.html"
+                        class="gkt-sidebar-active">traefik ingress 使用指南</a>
+                    
+                    <!-- Table of Contents -->
+<div id="sidebar-toc">
+  <!-- TOC  -->
+  
+  
+  <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#IngressRoute"><span class="toc-nav-text">IngressRoute</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#Ingress"><span class="toc-nav-text">Ingress</span></a></li></ol>
+  
+</div>
+
+<script>
+  (function () {
+    var h2 = document.querySelectorAll('article h2');
+    var h3 = document.querySelectorAll('article h3');
+    var linkList = document.querySelectorAll('#sidebar-toc a');
+
+    function findLinkElement(name) {
+      for (var i = 0; i < linkList.length; i++) {
+        var items = linkList[i].href.split('#');
+        if (items && items[items.length - 1] === encodeURIComponent(name)) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    function activeLink(titleList) {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      for (var i = titleList.length - 1; i >= 0; i--) {
+        if (scrollTop - titleList[i].offsetTop > 0) {
+          var index = findLinkElement(titleList[i].id);
+          index != -1 && linkList[index].classList.add('gkt-sidebar-active');
+          break;
+        }
+      }
+    }
+
+    window.addEventListener("scroll", function (e) {
+      [].slice.call(linkList).forEach(function (link) {
+        link.classList.remove('gkt-sidebar-active');
+      })
+      activeLink(h2);
+    })
+  })();
+</script>
+                    
+                </li>
+                
+            </ul>
+        </section>
+        
         
         <section class="gkt-sidebar-content box-shadow">
             <strong>最近的文章</strong>
@@ -678,30 +783,6 @@
                 
                 <li>
                     <a href="/post/install-k3s/install-k3s.html">部署k3s之旅</a>
-                </li>
-                
-                <li>
-                    <a href="/post/http-auth/http-auth.html">http身份认证介绍</a>
-                </li>
-                
-                <li>
-                    <a href="/post/golang-lock/golang-lock.html">小心golang读写锁的坑</a>
-                </li>
-                
-                <li>
-                    <a href="/post/check-key-in-dict/check-key-in-dict.html">判断字典里是否存在键的写法</a>
-                </li>
-                
-                <li>
-                    <a href="/post/git-study.html">git学习之旅</a>
-                </li>
-                
-                <li>
-                    <a href="/post/link.html">友情链接</a>
-                </li>
-                
-                <li>
-                    <a href="/post/about.html">关于我</a>
                 </li>
                 
             </ul>

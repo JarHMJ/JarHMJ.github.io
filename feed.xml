@@ -15,8 +15,33 @@
     <atom:link href="https://jarhmj.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <description>罐子，罐子的小站，罐子的博客</description>
-    <pubDate>Tue, 26 Apr 2022 14:33:56 GMT</pubDate>
+    <pubDate>Thu, 30 Jun 2022 04:35:55 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>traefik ingress 使用指南</title>
+      <link>https://jarhmj.github.io/post/traefik-ingress/traefik-ingress.html</link>
+      <guid>https://jarhmj.github.io/post/traefik-ingress/traefik-ingress.html</guid>
+      <pubDate>Thu, 30 Jun 2022 23:12:21 GMT</pubDate>
+      
+        
+        
+      <description>&lt;p&gt;&lt;img src=&quot;assets/image-20220630112815-gd519fo.png&quot; alt=&quot;image.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/containous/traefik&quot;&gt;Traefik&lt;/a&gt; 是一</description>
+        
+      
+      
+      
+      
+      <category domain="https://jarhmj.github.io/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</category>
+      
+      
+      <category domain="https://jarhmj.github.io/tags/traefik/">traefik</category>
+      
+      
+      <comments>https://jarhmj.github.io/post/traefik-ingress/traefik-ingress.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>github action 学习</title>
