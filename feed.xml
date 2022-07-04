@@ -15,14 +15,14 @@
     <atom:link href="https://jarhmj.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <description>罐子，罐子的小站，罐子的博客</description>
-    <pubDate>Thu, 30 Jun 2022 15:16:47 GMT</pubDate>
+    <pubDate>Mon, 04 Jul 2022 13:46:54 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
       <title>frp 暴露内网k8s集群服务</title>
       <link>https://jarhmj.github.io/post/frp-export-service/frp-export-service.html</link>
       <guid>https://jarhmj.github.io/post/frp-export-service/frp-export-service.html</guid>
-      <pubDate>Thu, 30 Jun 2022 23:06:06 GMT</pubDate>
+      <pubDate>Thu, 30 Jun 2022 15:06:06 GMT</pubDate>
       
         
         
@@ -47,7 +47,7 @@
       <title>traefik ingress 使用指南</title>
       <link>https://jarhmj.github.io/post/traefik-ingress/traefik-ingress.html</link>
       <guid>https://jarhmj.github.io/post/traefik-ingress/traefik-ingress.html</guid>
-      <pubDate>Thu, 30 Jun 2022 12:12:21 GMT</pubDate>
+      <pubDate>Thu, 30 Jun 2022 04:12:21 GMT</pubDate>
       
         
         
@@ -72,7 +72,7 @@
       <title>github action 学习</title>
       <link>https://jarhmj.github.io/post/github-action-study/github-action-study.html</link>
       <guid>https://jarhmj.github.io/post/github-action-study/github-action-study.html</guid>
-      <pubDate>Fri, 20 Aug 2021 09:09:51 GMT</pubDate>
+      <pubDate>Fri, 20 Aug 2021 01:09:51 GMT</pubDate>
       
         
         
@@ -95,13 +95,13 @@
       <title>部署k3s之旅</title>
       <link>https://jarhmj.github.io/post/install-k3s/install-k3s.html</link>
       <guid>https://jarhmj.github.io/post/install-k3s/install-k3s.html</guid>
-      <pubDate>Sun, 15 Aug 2021 23:12:21 GMT</pubDate>
+      <pubDate>Sun, 15 Aug 2021 15:12:21 GMT</pubDate>
       
         
         
       <description>&lt;ol&gt;
 &lt;li&gt;&lt;p&gt;安装k3s&lt;/p&gt;
-&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td c</description>
+&lt;figure class=&quot;highlight awk&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;</description>
         
       
       
@@ -121,7 +121,7 @@
       <title>http身份认证介绍</title>
       <link>https://jarhmj.github.io/post/http-auth/http-auth.html</link>
       <guid>https://jarhmj.github.io/post/http-auth/http-auth.html</guid>
-      <pubDate>Thu, 15 Apr 2021 22:12:33 GMT</pubDate>
+      <pubDate>Thu, 15 Apr 2021 14:12:33 GMT</pubDate>
       
         
         
@@ -148,7 +148,7 @@
       <title>小心golang读写锁的坑</title>
       <link>https://jarhmj.github.io/post/golang-lock/golang-lock.html</link>
       <guid>https://jarhmj.github.io/post/golang-lock/golang-lock.html</guid>
-      <pubDate>Fri, 28 Feb 2020 16:25:53 GMT</pubDate>
+      <pubDate>Fri, 28 Feb 2020 08:25:53 GMT</pubDate>
       
         
         
@@ -173,7 +173,7 @@
       <title>判断字典里是否存在键的写法</title>
       <link>https://jarhmj.github.io/post/check-key-in-dict/check-key-in-dict.html</link>
       <guid>https://jarhmj.github.io/post/check-key-in-dict/check-key-in-dict.html</guid>
-      <pubDate>Thu, 27 Jun 2019 16:59:08 GMT</pubDate>
+      <pubDate>Thu, 27 Jun 2019 08:59:08 GMT</pubDate>
       
         
         
@@ -198,7 +198,7 @@
       <title>git学习之旅</title>
       <link>https://jarhmj.github.io/post/git-study.html</link>
       <guid>https://jarhmj.github.io/post/git-study.html</guid>
-      <pubDate>Thu, 27 Jun 2019 14:44:08 GMT</pubDate>
+      <pubDate>Thu, 27 Jun 2019 06:44:08 GMT</pubDate>
       
         
         
@@ -219,29 +219,10 @@
     </item>
     
     <item>
-      <title>关于我</title>
-      <link>https://jarhmj.github.io/post/about.html</link>
-      <guid>https://jarhmj.github.io/post/about.html</guid>
-      <pubDate>Mon, 03 Jul 2017 11:51:24 GMT</pubDate>
-      
-      <description>woshijar</description>
-      
-      
-      
-      
-      
-      <category domain="https://jarhmj.github.io/tags/%E5%85%B3%E4%BA%8E%E6%88%91/">关于我</category>
-      
-      
-      <comments>https://jarhmj.github.io/post/about.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
       <title>友情链接</title>
       <link>https://jarhmj.github.io/post/link.html</link>
       <guid>https://jarhmj.github.io/post/link.html</guid>
-      <pubDate>Mon, 03 Jul 2017 11:51:24 GMT</pubDate>
+      <pubDate>Mon, 03 Jul 2017 03:51:24 GMT</pubDate>
       
       <description>jarhmj的友链</description>
       

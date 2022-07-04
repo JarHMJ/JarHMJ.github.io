@@ -1,1074 +1,740 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-default-color-scheme=auto>
 
-<!-- Head tag -->
+
+
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="referrer" content="no-referrer-when-downgrade">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="baidu-site-verification" content="" />
-  <meta name="google-site-verification" content="" />
-  <meta name="msvalidate.01" content="" />
-  <meta name="360-site-verification" content="" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- if page has tags, then add tags to keyword -->
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jarhmj">
+  <meta name="keywords" content="python, 编程学习分享">
+  
+    <meta name="description" content="最近想着部署一套面试系统用来简化自己的面试工作，首先第一个问题就把我难住了——没有资源，本人只有一台小弱鸡没法来部署这个面试系统，于是想到了部门的内网机器😏，利用内网穿透技术把服务暴露出去。 之前就久闻frp的大名，golang编写的内网穿透服务，支持 TCP、UDP、HTTP、HTTPS 等多种协议，接下来就用这个来试一下吧。 目前，我的公网机器上有个k3集群，我的所有个人服务都部署在k3s中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="frp 暴露内网k8s集群服务">
+<meta property="og:url" content="https://jarhmj.github.io/post/frp-export-service/frp-export-service.html">
+<meta property="og:site_name" content="罐子">
+<meta property="og:description" content="最近想着部署一套面试系统用来简化自己的面试工作，首先第一个问题就把我难住了——没有资源，本人只有一台小弱鸡没法来部署这个面试系统，于是想到了部门的内网机器😏，利用内网穿透技术把服务暴露出去。 之前就久闻frp的大名，golang编写的内网穿透服务，支持 TCP、UDP、HTTP、HTTPS 等多种协议，接下来就用这个来试一下吧。 目前，我的公网机器上有个k3集群，我的所有个人服务都部署在k3s中">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jarhmj.github.io/post/frp-export-service/frp-export-service/image-20220630180516-u0dy0ab.png">
+<meta property="article:published_time" content="2022-06-30T15:06:06.000Z">
+<meta property="article:modified_time" content="2022-07-04T13:46:54.631Z">
+<meta property="article:author" content="jarhmj">
+<meta property="article:tag" content="frp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://jarhmj.github.io/post/frp-export-service/frp-export-service/image-20220630180516-u0dy0ab.png">
   
   
-  <meta name="keywords" content=",frp,">
-  <!-- page.description has higher priority -->
-  <meta name="description" content="罐子，罐子的小站，罐子的博客">
-  <link rel="shortcut icon" href="/img/icon.jpg">
-  <title>
-    
-    frp 暴露内网k8s集群服务 | 罐子
-    
-  </title>
+  
+  <title>frp 暴露内网k8s集群服务 - 罐子</title>
 
-  <link rel="canonical" href="https://jarhmj.github.io/post/frp-export-service/frp-export-service.html">
-  
-<link rel="stylesheet" href="/css/geektutu.css">
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
-  <!-- global function -->
-  <script>
-    window.globalAddScript = function (url, onload, onerror) {
-      var s = document.createElement('script');
-      s.src = url;
-      onload && (s.onload = onload);
-      onerror && (s.onerror = onerror);
-      document.body.appendChild(s);
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"jarhmj.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"N9Pwjd7neEJGfQFHdzF1aC7Y-MdYXbMMI","app_key":"UBiYI9yAzg53E2SyBRRitPYW","server_url":null,"path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
-    window.globalAddCss = function (url) {
-      var s = document.createElement('link');
-      s.rel = 'stylesheet';
-      s.href = url;
-      document.body.appendChild(s);
-    }
-    window.getPosition = function (ele) {
-      var x = 0, y = 0;
-      while (ele) {
-        x += (ele.offsetLeft - ele.scrollLeft + ele.clientLeft);
-        y += (ele.offsetTop - ele.scrollTop + ele.clientTop);
-        ele = ele.offsetParent;
-      }
-      return { x: x, y: y };
-    }
-    window.getDom = function (str) { return document.querySelector(str) }
   </script>
-  <!-- google ad -->
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
-<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/feed.xml" title="罐子" type="application/rss+xml">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/feed.xml" title="罐子" type="application/rss+xml">
 </head>
 
+
 <body>
+  
+
+  <header>
     
-<header class="gkt-header col-xs-12 padding-0">
-    <div id="gkt-nav" class="gkt-header-container">
-        <a href="/" class="gkt-header-title float-left">
-            <img class="float-left" src="/img/icon.jpg" alt="">
-            <span>罐子</span>
-        </a>
-        <nav class="gkt-header-nav text-right">
-            <ul>
-                <li><a class="hidden-xs" href="/feed.xml">订阅</a></li>
-                <li><a href="/series/">专题</a></li>
-                <li><a href="/archives/">归档</a></li>
-                <li><a href="/post/link.html">友链</a></li>
-                <li><a href="/post/about.html">关于</a></li>
-            </ul>
-        </nav>
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>罐子</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-    <div id="gkt-cate-nav" class="gkt-header-container hidden-xs">
-        
-        <nav class="gkt-header-nav float-left">
-            <ul>
-                
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/git-study.html">git</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/check-key-in-dict/check-key-in-dict.html">python</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/golang-lock/golang-lock.html">golang</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http-auth/http-auth.html">http</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left ">
-                    <a class="float-left" href="/post/http-auth/http-auth.html">web</a>
-                    
-                </li>
-                
-                <li class="gkt-cate-name float-left active">
-                    <a class="float-left" href="/post/install-k3s/install-k3s.html">云原生</a>
-                    
-                </li>
-                
-            </ul>
-        </nav>
-    </div>
-</header>
-<div class="gkt-header-placeholder" style="height: 44px"></div>
-<div class="gkt-header-placeholder hidden-xs" style="height: 44px"></div>
-<script>
-    (function () {
-        window.addEventListener('scroll', function () {
-            if (window.innerWidth < 768) {
-                return;
-            }
-            var nav = document.querySelector('#gkt-nav');
-            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            scrollTop > 50 && (nav.classList.add('hide'));
-            scrollTop <= 50 && (nav.classList.remove('hide'));
-        });
-        var cateNavs = document.querySelectorAll('#gkt-cate-nav>nav>ul>li');
-        [].slice.call(cateNavs).forEach(function (item) {
-            var sub = item.querySelector('.gkt-sub-cate');
-            if (!sub) return;
-            item.addEventListener('mouseenter', function (e) { sub.style.display = 'block'; }, false);
-            item.addEventListener('mouseleave', function (e) { sub.style.display = 'none'; }, false);
-        })
-    })();
-</script>
-    <!-- Main Content -->
-    <div class="main-container">
-        <!-- Main Content -->
-<main class="col-xs-12 padding-0 markdown-it">
-    <!-- Post Container -->
-    
-    
-    <!-- Post Content -->
-<div class="float-left post-container box-shadow">
-    <div class="u-arrow-wrapper hidden-xs">
-        
-        <a class="float-left" href="/post/traefik-ingress/traefik-ingress.html"><i class="u-arrow-left"></i></a>
-        
-        
-    </div>
-    <article class="col-xs-12">
-        <h1> frp 暴露内网k8s集群服务 </h1>
-        
-        
-        <div class="hidden-lg hidden-md series_links">
-            <p> <strong> 云原生系列文章链接：</strong></p>
-            <ul>
-                
-                <li>
-                    <a href="/post/install-k3s/install-k3s.html">部署k3s之旅</a>
-                    <span class="post-item-date">(Aug 15, 2021)</span>
-                </li>
-                
-                <li>
-                    <a href="/post/traefik-ingress/traefik-ingress.html">traefik ingress 使用指南</a>
-                    <span class="post-item-date">(Jun 30, 2022)</span>
-                </li>
-                
-                <li>
-                    <a href="/post/frp-export-service/frp-export-service.html">frp 暴露内网k8s集群服务</a>
-                    <span class="post-item-date">(Jun 30, 2022)</span>
-                </li>
-                
-            </ul>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="frp 暴露内网k8s集群服务"></span>
+          
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-30 23:06" pubdate>
+          2022年6月30日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
         
         
-        <div class="gkt-article-start"></div>
-        <p>最近想着部署一套面试系统用来简化自己的面试工作，首先第一个问题就把我难住了——没有资源，本人只有一台小弱鸡没法来部署这个面试系统，于是想到了部门的内网机器😏，利用内网穿透技术把服务暴露出去。</p>
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">frp 暴露内网k8s集群服务</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>最近想着部署一套面试系统用来简化自己的面试工作，首先第一个问题就把我难住了——没有资源，本人只有一台小弱鸡没法来部署这个面试系统，于是想到了部门的内网机器😏，利用内网穿透技术把服务暴露出去。</p>
 <p>之前就久闻<a target="_blank" rel="noopener" href="https://gofrp.org/docs/">frp</a>的大名，golang编写的内网穿透服务，支持 TCP、UDP、HTTP、HTTPS 等多种协议，接下来就用这个来试一下吧。</p>
 <p>目前，我的公网机器上有个k3集群，我的所有个人服务都部署在k3s中，所以我也会把frp的服务端frps部署在k3s中，方便管理，然后在内网的k8s集群内部署frp的客户端frpc，这样就能把内网的服务给暴露到公网，架构大概如下图所示：</p>
-<p><img src="frp-export-service/image-20220630180516-u0dy0ab.png" alt="image.png"></p>
+<p><img src="frp-export-service/image-20220630180516-u0dy0ab.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
 <h1 id="操作步骤："><a href="#操作步骤：" class="headerlink" title="操作步骤："></a>操作步骤：</h1><h2 id="frps-部署配置"><a href="#frps-部署配置" class="headerlink" title="frps 部署配置"></a>frps 部署配置</h2><p>frps 服务端程序需要部署在公网集群上，通过deployment部署，yaml如下：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">frps</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">frps</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">snowdreamtech/frps:0.33.0</span></span><br><span class="line">          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">          <span class="attr">volumeMounts:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/etc/frp</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">      <span class="attr">restartPolicy:</span> <span class="string">Always</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">          <span class="attr">configMap:</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">frps</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">frps</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">frps</span><br>  <span class="hljs-attr">labels:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">frps</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">replicas:</span> <span class="hljs-number">1</span><br>  <span class="hljs-attr">template:</span><br>    <span class="hljs-attr">metadata:</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">frps</span><br>      <span class="hljs-attr">labels:</span><br>        <span class="hljs-attr">app:</span> <span class="hljs-string">frps</span><br>    <span class="hljs-attr">spec:</span><br>      <span class="hljs-attr">containers:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">frps</span><br>          <span class="hljs-attr">image:</span> <span class="hljs-string">snowdreamtech/frps:0.33.0</span><br>          <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">IfNotPresent</span><br>          <span class="hljs-attr">volumeMounts:</span><br>            <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/etc/frp</span><br>              <span class="hljs-attr">name:</span> <span class="hljs-string">config</span><br>      <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Always</span><br>      <span class="hljs-attr">volumes:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">config</span><br>          <span class="hljs-attr">configMap:</span><br>            <span class="hljs-attr">name:</span> <span class="hljs-string">frps</span><br>  <span class="hljs-attr">selector:</span><br>    <span class="hljs-attr">matchLabels:</span><br>      <span class="hljs-attr">app:</span> <span class="hljs-string">frps</span><br></code></pre></td></tr></table></figure>
 
 <p>frps 服务端程序的配置文件通过configMap挂载进pod内的<code>/etc/frp</code>下，所以我们再创建一个configMap:</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">frps.ini:</span> <span class="string">|-</span></span><br><span class="line"><span class="string">    [common]</span></span><br><span class="line"><span class="string">    bind_port=31000</span></span><br><span class="line"><span class="string">    # 服务端和客户端的 common 配置中的 token 参数一致则身份验证通过。</span></span><br><span class="line"><span class="string">    token=xxxxxxx</span></span><br><span class="line"><span class="string">    # 为了防止端口被滥用，可以手动指定允许哪些端口被使用</span></span><br><span class="line"><span class="string">    allow_ports=31001-31100</span></span><br><span class="line"><span class="string">    # trace, debug, info, warn, error</span></span><br><span class="line"><span class="string">    log_level = info</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">ConfigMap</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">frps</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">frps</span><br><span class="hljs-attr">data:</span><br>  <span class="hljs-attr">frps.ini:</span> <span class="hljs-string">|-</span><br><span class="hljs-string">    [common]</span><br><span class="hljs-string">    bind_port=31000</span><br><span class="hljs-string">    # 服务端和客户端的 common 配置中的 token 参数一致则身份验证通过。</span><br><span class="hljs-string">    token=xxxxxxx</span><br><span class="hljs-string">    # 为了防止端口被滥用，可以手动指定允许哪些端口被使用</span><br><span class="hljs-string">    allow_ports=31001-31100</span><br><span class="hljs-string">    # trace, debug, info, warn, error</span><br><span class="hljs-string">    log_level = info</span><br></code></pre></td></tr></table></figure>
 
 <p>frps 配置文件frps.ini更详细的配置可以在<a target="_blank" rel="noopener" href="https://gofrp.org/docs/reference/server-configures/">服务端配置 | frp (gofrp.org)</a>查看。</p>
 <p>frps 服务端程序bind_port 为 31000，此端口是用来和frpc客户端通信的，所以公网集群需要开通这个端口，把frps服务暴露到公网上，接着为frps创建一个nodeport类型的service，来暴露服务：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">31000</span></span><br><span class="line">      <span class="attr">nodePort:</span> <span class="number">31000</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Service</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">frps</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">frps</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">selector:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">frps</span><br>  <span class="hljs-attr">ports:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">port:</span> <span class="hljs-number">31000</span><br>      <span class="hljs-attr">nodePort:</span> <span class="hljs-number">31000</span><br>  <span class="hljs-attr">type:</span> <span class="hljs-string">NodePort</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="frpc-部署配置"><a href="#frpc-部署配置" class="headerlink" title="frpc 部署配置"></a>frpc 部署配置</h2><p>接下来，我们就可以来配置客户端程序了，frpc客户端还是通过deployment来部署，配置文件使用configMap来配置：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">frpc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">frpc</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">          <span class="attr">image:</span> <span class="number">10.29</span><span class="number">.3</span><span class="number">.18</span><span class="string">/docker.io/snowdreamtech/frpc:0.33.0</span></span><br><span class="line">          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">          <span class="attr">volumeMounts:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/etc/frp</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">      <span class="attr">restartPolicy:</span> <span class="string">Always</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config</span></span><br><span class="line">          <span class="attr">configMap:</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">frpc</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frpc</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">frpc.ini:</span> <span class="string">|-</span></span><br><span class="line"><span class="string">    [common]</span></span><br><span class="line"><span class="string">    token=xxxxxx</span></span><br><span class="line"><span class="string">    server_addr = &quot;公网集群的node ip&quot;</span></span><br><span class="line"><span class="string">    server_port = 31000</span></span><br><span class="line"><span class="string">    log_level=info</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">frpc</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">frpc</span><br>  <span class="hljs-attr">labels:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">frpc</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">replicas:</span> <span class="hljs-number">1</span><br>  <span class="hljs-attr">template:</span><br>    <span class="hljs-attr">metadata:</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">frpc</span><br>      <span class="hljs-attr">labels:</span><br>        <span class="hljs-attr">app:</span> <span class="hljs-string">frpc</span><br>    <span class="hljs-attr">spec:</span><br>      <span class="hljs-attr">containers:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">frpc</span><br>          <span class="hljs-attr">image:</span> <span class="hljs-number">10.29</span><span class="hljs-number">.3</span><span class="hljs-number">.18</span><span class="hljs-string">/docker.io/snowdreamtech/frpc:0.33.0</span><br>          <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">IfNotPresent</span><br>          <span class="hljs-attr">volumeMounts:</span><br>            <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/etc/frp</span><br>              <span class="hljs-attr">name:</span> <span class="hljs-string">config</span><br>      <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Always</span><br>      <span class="hljs-attr">volumes:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">config</span><br>          <span class="hljs-attr">configMap:</span><br>            <span class="hljs-attr">name:</span> <span class="hljs-string">frpc</span><br>  <span class="hljs-attr">selector:</span><br>    <span class="hljs-attr">matchLabels:</span><br>      <span class="hljs-attr">app:</span> <span class="hljs-string">frpc</span><br><span class="hljs-meta">---</span><br><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">ConfigMap</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">frpc</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">frpc</span><br><span class="hljs-attr">data:</span><br>  <span class="hljs-attr">frpc.ini:</span> <span class="hljs-string">|-</span><br><span class="hljs-string">    [common]</span><br><span class="hljs-string">    token=xxxxxx</span><br><span class="hljs-string">    server_addr = &quot;公网集群的node ip&quot;</span><br><span class="hljs-string">    server_port = 31000</span><br><span class="hljs-string">    log_level=info</span><br><span class="hljs-string"></span><br></code></pre></td></tr></table></figure>
 
 <p>配置中的<code>token</code>是用来认证的，需要和frps配置的一样; <code>server_addr</code> 是公网集群的node ip，<code>server_port</code>是之前暴露的服务端端口。</p>
 <p>如果你跟着一起配置到这里，那么恭喜你已经完成了一大半了，frp的基础配置已经完成。接下来的那就是暴露内网的服务了。</p>
 <h2 id="暴露内网服务"><a href="#暴露内网服务" class="headerlink" title="暴露内网服务"></a>暴露内网服务</h2><p>假设在内网集群内有个api的服务，现在我们需要通过刚才配置的frp来暴露出去。接下来更新一下frpc的配置，</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frpc</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frpc</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">frpc.ini:</span> <span class="string">|-</span></span><br><span class="line"><span class="string">    [common]</span></span><br><span class="line"><span class="string">    token=xxxxxx</span></span><br><span class="line"><span class="string">    server_addr = &quot;公网集群的node ip&quot;</span></span><br><span class="line"><span class="string">    server_port = 31000</span></span><br><span class="line"><span class="string">    log_level=info</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">    [<span class="string">guestbook-ui</span>]</span><br><span class="line">    <span class="comment">#/api</span></span><br><span class="line">    <span class="string">type</span> <span class="string">=</span> <span class="string">tcp</span></span><br><span class="line">    <span class="string">local_ip=guestbook-ui.default</span></span><br><span class="line">    <span class="string">local_port=80</span></span><br><span class="line">    <span class="string">remote_port=31001</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">ConfigMap</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">frpc</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">frpc</span><br><span class="hljs-attr">data:</span><br>  <span class="hljs-attr">frpc.ini:</span> <span class="hljs-string">|-</span><br><span class="hljs-string">    [common]</span><br><span class="hljs-string">    token=xxxxxx</span><br><span class="hljs-string">    server_addr = &quot;公网集群的node ip&quot;</span><br><span class="hljs-string">    server_port = 31000</span><br><span class="hljs-string">    log_level=info</span><br><span class="hljs-string"></span><br>    [<span class="hljs-string">guestbook-ui</span>]<br>    <span class="hljs-comment">#/api</span><br>    <span class="hljs-string">type</span> <span class="hljs-string">=</span> <span class="hljs-string">tcp</span><br>    <span class="hljs-string">local_ip=guestbook-ui.default</span><br>    <span class="hljs-string">local_port=80</span><br>    <span class="hljs-string">remote_port=31001</span><br></code></pre></td></tr></table></figure>
 
 <p>新增了guestbook-ui 服务的配置，<code>type</code> 为tcp，<code>local_ip</code>设置为guestbook-ui 的svc地址，<code>local_port</code>为guestbook-ui 的svc的端口，<code>remote_port</code>为映射到frps端的端口，即访问frps的31001端口服务就能访问到guestbook-ui。</p>
 <p>接下来，更新一下frps服务端的配置。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps-port</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">31001</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">&quot;port-31001&quot;</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">frps-port</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">frps</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.tls.certresolver:</span> <span class="string">letsencrypt</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.entrypoints:</span> <span class="string">web</span></span><br><span class="line">    <span class="attr">traefik.ingress.kubernetes.io/router.middlewares:</span> <span class="string">kube-system-redirect@kubernetescrd</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">&quot;example.com&quot;</span></span><br><span class="line">      <span class="attr">http:</span></span><br><span class="line">        <span class="attr">paths:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span></span><br><span class="line">            <span class="attr">pathType:</span> <span class="string">Prefix</span></span><br><span class="line">            <span class="attr">backend:</span></span><br><span class="line">              <span class="attr">service:</span></span><br><span class="line">                <span class="attr">name:</span> <span class="string">frps-port</span></span><br><span class="line">                <span class="attr">port:</span></span><br><span class="line">                  <span class="attr">number:</span> <span class="number">31001</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Service</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">frps-port</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">frps</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">selector:</span><br>    <span class="hljs-attr">app:</span> <span class="hljs-string">frps</span><br>  <span class="hljs-attr">ports:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">port:</span> <span class="hljs-number">31001</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">&quot;port-31001&quot;</span><br><span class="hljs-meta">---</span><br><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">networking.k8s.io/v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Ingress</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">frps-port</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">frps</span><br>  <span class="hljs-attr">annotations:</span><br>    <span class="hljs-attr">traefik.ingress.kubernetes.io/router.tls.certresolver:</span> <span class="hljs-string">letsencrypt</span><br>    <span class="hljs-attr">traefik.ingress.kubernetes.io/router.entrypoints:</span> <span class="hljs-string">web</span><br>    <span class="hljs-attr">traefik.ingress.kubernetes.io/router.middlewares:</span> <span class="hljs-string">kube-system-redirect@kubernetescrd</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">rules:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">host:</span> <span class="hljs-string">&quot;example.com&quot;</span><br>      <span class="hljs-attr">http:</span><br>        <span class="hljs-attr">paths:</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">/</span><br>            <span class="hljs-attr">pathType:</span> <span class="hljs-string">Prefix</span><br>            <span class="hljs-attr">backend:</span><br>              <span class="hljs-attr">service:</span><br>                <span class="hljs-attr">name:</span> <span class="hljs-string">frps-port</span><br>                <span class="hljs-attr">port:</span><br>                  <span class="hljs-attr">number:</span> <span class="hljs-number">31001</span><br></code></pre></td></tr></table></figure>
 
 <p>frps服务端的配置主要是把guestbook-ui的remote_port的服务通过ingress暴露到公网，当然通过nodeport的方式也可以。</p>
 <h2 id="后续计划："><a href="#后续计划：" class="headerlink" title="后续计划："></a>后续计划：</h2><p>其实这个方法有个弊端，就是修改完配置后每次都要重启容器，没法热加载，后续再优化。。。🍻</p>
 <h1 id="参考文档："><a href="#参考文档：" class="headerlink" title="参考文档："></a>参考文档：</h1><p><a target="_blank" rel="noopener" href="https://www.bookstack.cn/read/frp/README_zh.md">frp - 《frp v0.27 中文文档》 - 书栈网 · BookStack</a></p>
 
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
         
-<script src="/js/qrious.min.js"></script>
+  <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/" class="category-chain-item">云原生</a>
+  
+  
 
+      </span>
+    
+  
+</span>
 
-<div class="hidden-xs col-xs-12 text-center">
-    <canvas id="geektutu-post-qr"></canvas>
-    <p style="margin-top: -10px;"><small>微信扫一扫，阅读/分享</small></p>
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/frp/">#frp</a>
+      
+    </div>
+  
 </div>
-<script>
-    (function () {
-        new QRious({
-            element: document.getElementById('geektutu-post-qr'),
-            value: window.location.href,
-            size: 120
-        });
-    })();
-</script>
 
-        <hr style="margin-top: 2rem;">
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>frp 暴露内网k8s集群服务</div>
+      <div>https://jarhmj.github.io/post/frp-export-service/frp-export-service.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>jarhmj</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年6月30日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2022年7月4日</div>
+        </div>
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
         <div>
-            
-            <p>
-                <span>专题: </span>
-                
-                <a href="/series/#云原生">
-                    <code key="云原生" class="post-label">云原生</code>
-                </a>
-                
-            </p>
-            
-            <p>
-                <span>本文发表于 2022-06-30，最后修改于 2022-06-30。</span>
-            </p>
-            <!-- 文章末尾的提示 start -->
-            
-            <p>
-                本站永久域名「 <a
-                        href="/post/frp-export-service/frp-export-service.html">jarhmj.github.io</a>
-                    」，也可搜索「 罐子 」找到我。
-            </p>
+          
             
             
-                
-            <!-- 文章末尾的提示 end -->
+              <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+              <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                <i class="iconfont icon-nc"></i>
+              </span>
+              </a>
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+              <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                <i class="iconfont icon-sa"></i>
+              </span>
+              </a>
+            
+          
         </div>
-        <hr />
-        <p name="pagination" style="font-size: 1.2em">
-    
-    <a class="float-left" href="/post/traefik-ingress/traefik-ingress.html">上一篇 « traefik ingress 使用指南</a>
-    
-    
-</p>
-    </article>
-    <!-- 赞赏 -->
-    <!--打赏-->
-
-<style>
-    #reward .reward-btn-wrapper {
-        width: 100px;
-        padding-top: 35px;
-        cursor: pointer;
-        margin: 0 auto;
-    }
-
-    #reward .reward-btn {
-        padding: 2px 15px;
-        color: #fff;
-        background-color: #ea6f5a;
-        border-radius: 20px;
-    }
-
-    #reward .reward-code {
-        position: absolute;
-        top: -220px;
-        left: 50%;
-        display: none;
-        width: 360px;
-        height: 240px;
-        margin-left: -180px;
-        padding: 15px 20px;
-        border: 1px solid #e6e6e6;
-        background: #fff;
-        box-shadow: 0 1px 1px 1px #efefef;
-    }
-
-    #reward .reward-code:after,
-    #reward .reward-code:before {
-        position: absolute;
-        content: '';
-        border: 10px solid transparent
-    }
-
-    #reward .reward-code:after {
-        bottom: -19px;
-        left: 50%;
-        margin-left: -10px;
-        border-top-color: #fff
-    }
-
-    #reward .reward-code:before {
-        bottom: -20px;
-        left: 50%;
-        margin-left: -10px;
-        border-top-color: #e6e6e6
-    }
-
-    #reward .qr-code {
-        width: 50%;
-        float: left;
-        padding: 5px;
-    }
-
-    #reward .qr-code p {
-        margin-top: -6px;
-    }
-
-    #reward img {
-        transform: none;
-        -webkit-transform: none;
-        margin-left: 0;
-    }
-
-    #reward img[alt='i'] {
-        width: 20px;
-        height: 20px;
-        z-index: 2;
-        position: absolute;
-        margin: 65px 0 0 65px;
-    }
-
-    #reward img[alt="ali"] {
-        width: 100%;
-        box-sizing: border-box;
-        border: 5px solid #0f9be0;
-    }
-
-    #reward img[alt="wechat"] {
-        width: 100%;
-        box-sizing: border-box;
-        border: 5px solid #3db034;
-    }
-
-    #reward .reward-tip {
-        font-size: 1.2em;
-        margin-bottom: 0;
-        color: #ea6f5a;
-    }
-</style>
-<div id="reward" class="col-xs-12">
-    <div class="reward-btn-wrapper">
-        <div class="reward-btn text-center">赞赏支持</div>
+      </div>
     </div>
-    <div class="reward-code text-center">
-        <p class="text-center reward-tip"><strong>请我吃胡萝卜 =^_^= </strong></p>
-        <div class="qr-code">
-            <img src="/img/icon.jpg" alt="i">
-            <img id="reward-ali" src="" alt="ali">
-            <p><small>支付宝</small></p>
-        </div>
-        <div class="qr-code">
-            <img src="/img/icon.jpg" alt="i">
-            <img id="reward-wechat" src="" alt="wechat">
-            <p><small>微信</small></p>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window, document) {
-        var aliQr = new QRious({ value: 'https://qr.alipay.com/fkx13691qilrprfxx8phufc' });
-        var wechatQr = new QRious({ value: 'wxp://f2f01zKUJwzMZXXvOfe9_IwRigA8EKCzlPuU' });
-        document.querySelector('#reward-ali').src = aliQr.toDataURL();
-        document.querySelector('#reward-wechat').src = wechatQr.toDataURL();
+    <div class="license-icon iconfont"></div>
+  </div>
 
-        var rewardBtn = document.querySelector('#reward .reward-btn-wrapper');
-        var qrCode = document.querySelector('#reward .reward-code')
-        var activeFunc = function (e) {
-            qrCode.style.display = 'block';
-        }
-        var hideFunc = function (e) {
-            qrCode.style.display = 'none';
-        }
 
-        rewardBtn.addEventListener('mouseenter', activeFunc, false)
-        rewardBtn.addEventListener('mouseover', activeFunc, false)
-        rewardBtn.addEventListener('mouseleave', hideFunc, false)
-        qrCode.addEventListener('mouseenter', activeFunc, false)
-        qrCode.addEventListener('mouseover', activeFunc, false)
-        qrCode.addEventListener('mouseleave', hideFunc, false)
-    })(window, document);
-</script>
 
-    
-<div class="col-xs-12 text-center" style="margin-top: 30px;">
-    
-    <a style="display:inline-block;" target="_blank" rel="noopener" href="https://github.com/JarHMJ" title="Github"><img style="padding:5px;width:30px;margin-left:0;transform:none;-webkit-transform:none;" src="/img/related_links/github.png" /></a>
-    
-    <a style="display:inline-block;" href="https://jarhmj.github.io/feed.xml" title="RSS"><img style="padding:5px;width:30px;margin-left:0;transform:none;-webkit-transform:none;" src="/img/related_links/rss.jpg" /></a>
-    
-</div>
-
-    <!-- 推荐阅读三篇文章 -->
-    <div class="col-xs-12">
-        <h3>推荐阅读</h3>
-        
-        <div class="post-preview">
-    <div class="post-img" style="background-image: url('/')"></div>
-    <div class="post-info">
-        <div class="post-info-center">
-            <div class="hidden-xs">
-                
-                
-                <span>/</span>
-                
-                <a class="text-gray" href="/tags/#frp"
-                    title="frp">frp</a>
-                <span>/</span>
-                
-                
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/post/traefik-ingress/traefik-ingress.html" title="traefik ingress 使用指南">
+                        <span class="hidden-mobile">traefik ingress 使用指南</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
             </div>
-            <a href="/post/frp-export-service/frp-export-service.html" class="title">
-                frp 暴露内网k8s集群服务
-            </a>
-            <p class="text-gray">
-                <small>
-                    <span>发表于2022-06-30，</span>
-                    <span class="hidden-xs">全文4513字，</span>
-                    <span>阅读约16分钟</span>
-                </small>
-            </p>
-        </div>
-    </div>
-</div>
-        
-        <div class="post-preview">
-    <div class="post-img" style="background-image: url('/')"></div>
-    <div class="post-info">
-        <div class="post-info-center">
-            <div class="hidden-xs">
-                
-                
-                <span>/</span>
-                
-                <a class="text-gray" href="/tags/#traefik"
-                    title="traefik">traefik</a>
-                <span>/</span>
-                
-                
-            </div>
-            <a href="/post/traefik-ingress/traefik-ingress.html" class="title">
-                traefik ingress 使用指南
-            </a>
-            <p class="text-gray">
-                <small>
-                    <span>发表于2022-06-30，</span>
-                    <span class="hidden-xs">全文2022字，</span>
-                    <span>阅读约7分钟</span>
-                </small>
-            </p>
-        </div>
-    </div>
-</div>
-        
-        <div class="post-preview">
-    <div class="post-img" style="background-image: url('/')"></div>
-    <div class="post-info">
-        <div class="post-info-center">
-            <div class="hidden-xs">
-                
-                
-                <span>/</span>
-                
-                <a class="text-gray" href="/tags/#git"
-                    title="git">git</a>
-                <span>/</span>
-                
-                
-            </div>
-            <a href="/post/git-study.html" class="title">
-                git学习之旅
-            </a>
-            <p class="text-gray">
-                <small>
-                    <span>发表于2019-06-27，</span>
-                    <span class="hidden-xs">全文504字，</span>
-                    <span>阅读约2分钟</span>
-                </small>
-            </p>
-        </div>
-    </div>
-</div>
-        
-    </div>
-    <div class="col-xs-12">
-        <!-- 标签列表 -->
-        <!-- Featured Tags -->
-<style>
-    #featured-tag .post-tag-item {
-        font-size: 12px;
-        line-height: 30px;
-        display: inline-block;
-        height: 30px;
-        margin: 5px 0px;
-        padding: 0 7px;
-        color: #333;
-        border-radius: 15px;
-        background: #f6f6f6;
-    }
 
-    #featured-tag .post-tag-item:hover {
-        color: #337ab7;
-    }
-</style>
-<div id="featured-tag">
+            
+  <article id="comments" lazyload>
     
-    <a class="post-tag-item" href="/tags/#golang" title="golang"
-        rel="1">#golang (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#关于我" title="关于我"
-        rel="1">#关于我 (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#git" title="git"
-        rel="1">#git (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#友链" title="友链"
-        rel="1">#友链 (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#python" title="python"
-        rel="1">#python (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#frp" title="frp"
-        rel="1">#frp (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#ci" title="ci"
-        rel="1">#ci (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#http" title="http"
-        rel="1">#http (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#k3s" title="k3s"
-        rel="1">#k3s (1) </a>
-    
-    <a class="post-tag-item" href="/tags/#traefik" title="traefik"
-        rel="1">#traefik (1) </a>
-    
-</div>
-    </div>
-    <!-- 评论 -->
-    
-    <div class="col-xs-12">
-        
-<div class="col-xs-12 padding-0">
-    <div id="gitalk-container">
-        <div class="gt-container text-center" style="margin-top: 50px;">
-            <button class="gt-btn gt-btn-public"><span class="gt-btn-text">去 Github 评论</span></button>
-        </div>
-    </div>
-    <div id="gitalk-related"></div>
-</div>
-
-<link rel="stylesheet" href="/css/gitalk.css">
-
-
-<script src="/js/gitalk.min.js"></script>
-
-<script>
-    window.addEventListener('load', function () {
-        function renderCommentUrl(data) {
-            var url = (data[window.location.pathname] || {}).url
-            url && getDom('#gitalk-container button').addEventListener('click', function (e) { window.open(url)})
-            url || (getDom('#gitalk-container').style.display = 'none')
-        }
-        const gitalk = new Gitalk({
-            clientID: '16f276b44d848c62adb5',
-            clientSecret: 'd08d9c4868bfc4bcc0a74613ce5f1ed896c104b1',
-            accessToken: 'xxxx',
-            repo: 'jar-blog-comment',
-            owner: 'JarHMJ',
-            admin: ['JarHMJ'],
-            id: window.location.pathname,
-            distractionFreeMode: false
-        });
-        fetch("https://api.github.com/user").then(function(resp){
-            gitalk.render('gitalk-container');
-        }).catch(function(e){
-            fetch('/tool/issues.json').then(function (r) { return r.json() }).then(renderCommentUrl).catch(function (e) { })
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://lib.baomitu.com/waline/2.5.1/waline.min.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/waline/2.5.1/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://vercel-waline-sage.vercel.app/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
         })
-        getDom('#gitalk-container').addEventListener('click', function (e) {
-            e && e.stopPropagation && e.stopPropagation();
-        });
-    })
-</script>
-<script>
-    window.addEventListener('load', function () {
-        function render(comments) {
-            var template = '<a href="${comment.url}?utm_source=gitalk" class="dis-item-url"><h3 class="dis-item-title">${comment.title}</h3>' +
-                '<p class="dis-item-des">${comment.count} 评论 ● ${comment.date}</p>' +
-                '<div class="dis-item-content"><img class="dis-item-img" src="${comment.icon}" alt="icon"><p><b><span class="dis-item-user">${comment.user}</span></b>&nbsp;——&nbsp;${comment.body}</p></div>' +
-                '</a>'
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
-            var wrapper = getDom('#gitalk-related');
-            comments = shuffle(comments);
-            comments.slice(0, 4).forEach(function (c) {
-                var div = document.createElement('div');
-                div.classList.add('dis-item');
-                div.innerHTML = template.replace("${comment.url}", c.url)
-                    .replace("${comment.title}", c.title)
-                    .replace("${comment.count}", c.count)
-                    .replace("${comment.date}", c.date)
-                    .replace("${comment.icon}", c.icon)
-                    .replace("${comment.user}", c.user)
-                    .replace("${comment.body}", c.body)
-                wrapper.appendChild(div)
-            })
-            var p = document.createElement('p')
-            p.innerHTML = '<a target="_blank" rel="noopener" href="https://geektutu.com/post/blog-experience-7.html">Gitalk Plus</a>';
-            p.classList.add('dis-divide');
-            wrapper.appendChild(p);
-            wrapper.classList.add('dis-wrapper')
-        }
-        function shuffle(a) {
-            for (var i = a.length - 1; i > 0; i--) {
-                var j = Math.floor(Math.random() * (i + 1));
-                [a[i], a[j]] = [a[j], a[i]];
-            }
-            return a;
-        }
-        fetch('/tool/comments.json').then(function (r) { return r.json() }).then(render).catch(function (e) { })
-    })
-</script>
 
+  </article>
+
+
+          </article>
+        </div>
+      </div>
     </div>
-    
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
-<aside class="float-left gkt-sidebar hidden-xs hidden-sm">
-    <div style="clear: both"></div>
-    <div class="gkt-sidebar-wrapper">
-        <section class="box-shadow"><style>
-    .gkt-summary {
-        border: 1px solid #DDDDDD;
-        border-radius: 3px;
-        padding: 5px;
-        width: 100%;
-    }
 
 
-    .gkt-summary nav {
-        overflow: hidden;
-    }
 
-    .gkt-summary nav a {
-        display: inline-block;
-        text-align: center;
-        color: #333;
-        font-size: 12px;
-    }
+  </aside>
 
-    .gkt-summary nav span {
-        display: block;
-    }
 
-    .gkt-summary nav .middle {
-        border-left: 1px solid #eaecef;
-        border-right: 1px solid #eaecef;
-    }
-
-    .gkt-summary .number {
-        font-weight: bold;
-    }
-
-    .gkt-summary .link-list {
-        margin-top: 5px;
-        margin-bottom: -5px;
-        padding-top: 7px;
-        border-top: 1px dashed #999;
-        display: flex;
-    }
-
-    .gkt-summary .link-list a {
-        flex: 1;
-    }
-
-    .gkt-summary .link-list img {
-        width: 25px;
-        height: 25px;
-    }
-</style>
-
-<div class="gkt-summary">
-    <nav>
-        <a href="/" class="col-xs-4">
-            <span class="number">10</span><span>文章</span>
-        </a>
-        <a href="/series" class="col-xs-4 middle">
-            <span class="number">6</span><span>专题</span>
-        </a>
-        <a href="/tags" class="col-xs-4">
-            <span class="number">10</span><span>标签</span>
-        </a>
-    </nav>
-
-    
-    <div class="link-list">
-        
-        <a target="_blank" rel="noopener" href="https://github.com/JarHMJ"><img src="/img/related_links/github.png" /></a>
-        
-        <a href="https://jarhmj.github.io/feed.xml"><img src="/img/related_links/rss.jpg" /></a>
-        
     </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
     
-</div></section>
-        
-        
-        <section class="gkt-sidebar-content box-shadow">
-            <strong>云原生</strong>
-            <ul>
-                
-                <li>
-                    <a href="/post/install-k3s/install-k3s.html"
-                        class="">部署k3s之旅</a>
-                    
-                </li>
-                
-                <li>
-                    <a href="/post/traefik-ingress/traefik-ingress.html"
-                        class="">traefik ingress 使用指南</a>
-                    
-                </li>
-                
-                <li>
-                    <a href="/post/frp-export-service/frp-export-service.html"
-                        class="gkt-sidebar-active">frp 暴露内网k8s集群服务</a>
-                    
-                    <!-- Table of Contents -->
-<div id="sidebar-toc">
-  <!-- TOC  -->
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
   
   
-  <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-nav-text">操作步骤：</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#frps-%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE"><span class="toc-nav-text">frps 部署配置</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#frpc-%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE"><span class="toc-nav-text">frpc 部署配置</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%9A%B4%E9%9C%B2%E5%86%85%E7%BD%91%E6%9C%8D%E5%8A%A1"><span class="toc-nav-text">暴露内网服务</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%90%8E%E7%BB%AD%E8%AE%A1%E5%88%92%EF%BC%9A"><span class="toc-nav-text">后续计划：</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3%EF%BC%9A"><span class="toc-nav-text">参考文档：</span></a></li></ol>
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
   
 </div>
 
-<script>
-  (function () {
-    var h2 = document.querySelectorAll('article h2');
-    var h3 = document.querySelectorAll('article h3');
-    var linkList = document.querySelectorAll('#sidebar-toc a');
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      苏ICP备2021014627号-1
+    </a>
+  </span>
+  
+</div>
 
-    function findLinkElement(name) {
-      for (var i = 0; i < linkList.length; i++) {
-        var items = linkList[i].href.split('#');
-        if (items && items[items.length - 1] === encodeURIComponent(name)) {
-          return i;
-        }
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
       }
-      return -1;
-    }
-
-    function activeLink(titleList) {
-      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      for (var i = titleList.length - 1; i >= 0; i--) {
-        if (scrollTop - titleList[i].offsetTop > 0) {
-          var index = findLinkElement(titleList[i].id);
-          index != -1 && linkList[index].classList.add('gkt-sidebar-active');
-          break;
-        }
-      }
-    }
-
-    window.addEventListener("scroll", function (e) {
-      [].slice.call(linkList).forEach(function (link) {
-        link.classList.remove('gkt-sidebar-active');
-      })
-      activeLink(h2);
-    })
-  })();
-</script>
-                    
-                </li>
-                
-            </ul>
-        </section>
-        
-        
-        <section class="gkt-sidebar-content box-shadow">
-            <strong>最近的文章</strong>
-            <ul>
-                
-                <li>
-                    <a href="/post/frp-export-service/frp-export-service.html">frp 暴露内网k8s集群服务</a>
-                </li>
-                
-                <li>
-                    <a href="/post/traefik-ingress/traefik-ingress.html">traefik ingress 使用指南</a>
-                </li>
-                
-                <li>
-                    <a href="/post/github-action-study/github-action-study.html">github action 学习</a>
-                </li>
-                
-            </ul>
-        </section>
-        
-    </div>
-</aside>
-
-<script>
-    (function () {
-        function resizeUArrow() {
-            var s = getDom('.u-arrow-wrapper').style
-            var pc = getDom('.post-container')
-            s.left = getPosition(pc).x + 'px';
-            s.width = pc.clientWidth + 'px';
-        }
-        resizeUArrow()
-        window.addEventListener('resize', resizeUArrow);
-    })();
-</script>
-
-    
-
-<script>
-    (function () {
-        var ele = getDom('.gkt-sidebar-content')
-        if(!ele) return;
-        var wrapper = getDom('.gkt-sidebar-wrapper')
-        var last = 0
-        ele.style.maxHeight = ((window.innerHeight || 798) - 200) + 'px'
-        var f = function (e) {
-            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            var isDown = scrollTop > last;
-            var pos = getPosition(ele).y - scrollTop;
-            var downLimit = 50;
-            var upLimit = -100;
-            // uarrow.style.marginTop = scrollTop + 'px';
-            isDown && pos <= downLimit && wrapper.classList.add("gkt-sidebar-fixed");
-            !isDown && pos > upLimit && wrapper.classList.remove("gkt-sidebar-fixed");
-            last = scrollTop
-        }
-        f()
-        window.addEventListener("scroll", f)
-    })();
-</script>
-
-</main>
-    </div>
-    <style>
-    img#go-top {
-        position: fixed;
-        bottom: 100px;
-        width: 50px;
-        cursor: pointer;
-        z-index: 9999;
-    }
-</style>
-<img id="go-top" src="/icon/top.png" class="hidden-xs" style="display: none" />
-<script>
-    (function () {
-        var goTop = document.getElementById('go-top');
-        var mainContainer = document.querySelector('.main-container');
-        
-        goTop.addEventListener('click', function () {
-            window.scroll(0, 0);
-        }, false);
-        window.addEventListener('scroll', function () {
-            var right = document.body.offsetWidth - mainContainer.getBoundingClientRect().right;
-            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            goTop.style.right = right + 10 + 'px'
-            scrollTop > 700 && (goTop.style.display = "block");
-            scrollTop <= 700 && (goTop.style.display = "none");
-        });
-    })();
-</script>
-    <style>
-    #geektutu-click-img-container {
-        position: fixed;
-        left: 0;
-        top: 0;
-        text-align: center;
-        width: 100%;
-        display: none;
-        z-index: 9999;
-    }
-
-    #geektutu-click-img-container img {
-        object-fit: contain;
-        background: #eaecef;
-        padding: 15px;
-        border-radius: 10px;
-        height: auto;
-        width: auto;
-        vertical-align: middle;
-    }
-</style>
-
-
-<div id="geektutu-click-img-container">
-    <img src="" alt="Big Image">
-</div>
-
-<script>
-    (function () {
-        var container = document.querySelector('#geektutu-click-img-container')
-        var targetImg = container.querySelector('img')
-        var imgs = document.querySelectorAll('article img');
-        targetImg.addEventListener('click', function (e) {
-            container.style.display = 'none';
-            e && e.stopPropagation && e.stopPropagation();
-        }, false);
-
-        for (var i = 0; i < imgs.length; ++i) {
-            var img = imgs[i];
-            img.addEventListener('click', (function (src, rate) {
-                return function (e) {
-                    e && e.stopPropagation && e.stopPropagation();
-                    if (window.innerWidth < 980) {
-                        return
-                    }
-                    targetImg.style.height = targetImg.style.width = 'auto';
-                    if (window.innerWidth / window.innerHeight > rate) {
-                        targetImg.style.height = (window.innerHeight - 20) + 'px';
-                    } else {
-                        targetImg.style.width = (window.innerWidth - 20) + 'px';
-                    }
-                    container.style.height = window.innerHeight + 'px'
-                    container.style.lineHeight = window.innerHeight + 'px'
-                    container.style.display = 'block';
-                    targetImg.src = src;
-                };
-            }(img.src, img.width / img.height)), false)
-        }
-    })();
-</script>
-    <!-- Footer -->
-    <!-- Footer -->
-<style>
-    footer {
-        width: 100%;
-        line-height: 1.5;
-        padding: 20px;
-    }
-
-    footer a {
-        color: #333;
-        text-decoration: none;
-    }
-
-    .footer-hexo img {
-        height: 20px;
-        margin-bottom: -5px;
-    }
-
-    .footer-hexo a {
-        color: #337ab7;
-    }
-</style>
-<footer class="text-center col-xs-12">
-    <p>
-        <small>© 2022 - jarhmj - </small>
-        <small>
-            <a target="_blank" rel="nofollow noopener" href="http://beian.miit.gov.cn/">苏ICP备2021014627号-1</a>
-        </small>
-    </p>
-    <p class="footer-hexo">
-        <!-- 但若直接使用或修改主题，请务必保留这段声明 -->
-        <small>Powered by <a target="_blank" href="https://hexo.io">Hexo</a> | Theme
-            <a target="_blank" href="https://geektutu.com">Geektutu</a>
-            <a target="_blank" rel="noopener" href="https://github.com/geektutu/hexo-theme-geektutu">
-                <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAYGBgYHBgcICAcKCwoLCg8ODAwODxYQERAREBYiFRkVFRkVIh4kHhweJB42KiYmKjY+NDI0PkxERExfWl98fKcBBgYGBgcGBwgIBwoLCgsKDw4MDA4PFhAREBEQFiIVGRUVGRUiHiQeHB4kHjYqJiYqNj40MjQ+TERETF9aX3x8p//CABEIACIAUAMBIgACEQEDEQH/xAAcAAABBAMBAAAAAAAAAAAAAAAAAQQFBwIDBgj/2gAIAQEAAAAA9KrHSgAYL5/z6zZGuJd12uugbhq3uKtmuRtix20IS7lTLAfAAAn/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/9oACAECEAAAAAAB/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/aAAgBAxAAAAAAAf/EADEQAAICAQIEBQEGBwAAAAAAAAECAwQFAAYREhORBxQhUlQxQVFic5KxJDJCYYGC0f/aAAgBAQABPwCFHnjWUzuvN6hV4cANSRLGjO9yRVUcSzMoA7jVXJYe5N0a2dhmk9kc0bN2GvLN8mbuNeWb5M3ca8s3yZu415Y/Jm7jXlm+TN3H/NeVPyZu40vOk3TZywK8wJ+v3EHVM/wsI/Dq2lrxN3Nnca16eti8chSAIoMbzByhMwP14kHVfwIiSaF5c96J6kwwCOTnHsYk8uvCrdmQy1TI4rJuz3cZLyGR/wCd4+YoOf8AEpUjXitubLYPG4paFsUxcuiGe7yc5gTW3LW44szXmobsi3Dhmic2+Z4+vCVH9CpraPiQ+QvbgTJrPFBWd5YpWrmNIIEXiRO32Pqt4p7cnfHk18lFBdmEVW1LVdIZGOrniTt6plrWKaO69yCykDRxwF+LMAewB0Txtr+Sf31VI8tEPw62fZt7N3Humtbpzz13ucX6CGSWMSuzpLyD1eNgeUka3PuvHbaxq3biTMHfkiSNCS78CwU+3Xg7Vu3MhuTcU6cq3Zemn3Eh2dv8Lzcut+29x1atKbHYqLJUhLwyNMwiZ3j9yDWOxUOV3tgb+3No5LDx1pi9+aeIwRlNY6bc+Jv+IFGrhLxtXJZ7VKcw81diiAAEn0JOrkWZyNfbEr0tz27UGQgkuGzXdIIvyowq99bRxk9ffO/L81SZBPZgEEroQroIxxMZOgeNsfkn99QypHGqO4Vl9CDrN4LDZkwyzyyQ2IgRHZrzGCZVP1XnQglT9oOtw4LC7iqV6uRkZoYpxKFSQpzFRw4EjVRMfSrQ1qqwxQxKFjjTgFUD7BoWYR6iVe+mtxt9Zwf9teaj4AdccPu5tedX5A/VrzUR+sy/q1CwksF19VEfDj/cnQRW+qg66cfsXtrpx+xe2unH7F7a6cfsXtrpx+xe2unH7F7a6cfsXtoxx+xe2gAAOA1//8QAFBEBAAAAAAAAAAAAAAAAAAAAMP/aAAgBAgEBPwB//8QAFBEBAAAAAAAAAAAAAAAAAAAAMP/aAAgBAwEBPwB//9k="
-                    alt="Github Star">
-            </a>
-        </small>
-    </p>
-    
-    <p>
-        <small>
-            <span id="busuanzi_container_site_pv">👁<span id="busuanzi_value_site_pv"></span></span> &nbsp;
-            <span id="busuanzi_container_page_pv">📚<span id="busuanzi_value_page_pv"></span></span>
-        </small>
-    </p>
-    
-    
-
-</footer>
-
-
-<script>
-    window.addEventListener('load', function () {
-        globalAddScript('//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js');
-    })
-</script>
-
-<!-- Baidu Tongji -->
-
-
-
-
-
-    <script>
-        // 非本站网址，新开tab页签
-        (function () {
-            var stopBubble = function (e) {
-                e && e.stopPropagation && e.stopPropagation();
-            }
-            var links = document.querySelectorAll('a');
-            [].slice.call(links).forEach(function (item) {
-                if (item.href && item.href.indexOf(window.location.host) === -1) {
-                    item.target = '_blank'
-                }
-                // 阻止冒泡，不触发彩蛋。
-                item.addEventListener('click', stopBubble, false);
-            });
-            var article = document.querySelector('article');
-            article && article.addEventListener('click', stopBubble, false)
-        })();
-    </script>
-    
-<script>
-    (function (window, document, undefined) {
-        var hearts = [];
-        var keywords = ["点个赞", "留个言", "赞赏一下", "罐子", "jarhmj.github.io"];
-        function randomInt(max) {
-            return Math.floor(Math.random() * Math.floor(max));
-        }
-        window.addEventListener('click', createWord)
-
-        function createWord(e) {
-            var d = document.createElement("span");
-            d.style.position = 'fixed';
-            d.style.zIndex = 9999;
-            d.style.color = 'rgb(' + [randomInt(255), randomInt(255), randomInt(255)].join(',') + ')';
-            d.innerHTML = keywords[randomInt(keywords.length)];
-            d.onselectstart = function () { return false; }
-
-            hearts.push({ el: d, x: e.clientX - 5, y: e.clientY - 5, alpha: 1, scale: 1 });
-            document.body.appendChild(d);
-        }
-        (function gameloop() {
-            for (var i = 0; i < hearts.length; i++) {
-                heart = hearts[i];
-                if (heart.alpha <= 0) {
-                    document.body.removeChild(heart.el);
-                    hearts.splice(i, 1);
-                    continue;
-                }
-                heart.y -= heart.alpha < 0.5 ? 2 : 1;
-                heart.scale += 0.002;
-                heart.alpha -= 0.013;
-                heart.el.style.transform = 'scale(' + heart.scale + ')';
-                heart.el.style.left = heart.x + 'px';
-                heart.el.style.top = heart.y + 'px';
-            }
-            setTimeout(gameloop, 10)
-        })();
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
     })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
 </script>
 
-</body>
 
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
 </html>
